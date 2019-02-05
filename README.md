@@ -13,4 +13,6 @@ gcc -m64 -lm -lxcb -O3 -lvulkan -fdata-sections -ffunction-sections -Wl,--gc-sec
 
 **Screenshot/Video** 
 
-[![youtube](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/v1.jpg)](https://youtu.be/5Wzj-GNAo6c)
+[![youtube](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/v1yt.jpg)](https://youtu.be/5Wzj-GNAo6c)
+
+![scr](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/v1.jpg)
