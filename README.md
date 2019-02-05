@@ -4,7 +4,7 @@
 
 **v1** minimal launcher for my mini "shader game", everything in single shader using loop for draw. 
 
-*Build*:
+**Build**:
 ```
 gcc -m64 -lm -lxcb -O3 -lvulkan -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme
 ```
