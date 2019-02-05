@@ -34,6 +34,7 @@ static struct update_vals uniform_vals;
 #if defined(_WIN32)
 
 #include <windows.h>
+#include <time.h>
 #define CLOCK_MONOTONIC_RAW 0
 #define BILLION                             (1E9)
 
