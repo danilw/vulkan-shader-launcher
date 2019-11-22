@@ -21,29 +21,26 @@ set(SOURCES
 	"vklauncher.c" 
 )
 
-add_definitions(-O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wall -Wextra)
-
 add_executable(
 		VKme
 		${SOURCES} 
 )
 
-IF (WIN32)
-
-target_link_libraries(VKme ${Vulkan_LIBRARY})
-
-ELSE()
-
-function(shader_compile SHADER_SOURCE)
-execute_process(
+if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
+  add_definitions(/Wall /WX /wd4514)
+  target_link_libraries(VKme ${Vulkan_LIBRARY})
+elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+  function(shader_compile SHADER_SOURCE)
+  execute_process(
     COMMAND python ../shader_to_hex.py ${SHADER_SOURCE}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-endfunction(shader_compile)
+  )
+  endfunction(shader_compile)
 
-shader_compile("main.vert")
-shader_compile("main.frag")
+  shader_compile("main.vert")
+  shader_compile("main.frag")
 
-target_link_libraries(VKme m xcb ${Vulkan_LIBRARY})
-
-ENDIF()
+  target_link_libraries(VKme m xcb ${Vulkan_LIBRARY})
+else()
+  message(WARNING "Unknown compiler '${CMAKE_C_COMPILER_ID}'!")
+endif()
