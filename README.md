@@ -2,6 +2,9 @@
 
 **what is it** creating simple minimal "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else)
 
+**v2** *TODO* fbo support, better code...soon...
+___
+
 **v1_1** Updated *v1* with `CMakeLists.txt` and `spirv to hex` converter. 
 
 **v1** minimal launcher for my mini "shader game", everything in single shader using loop for draw. Build:
