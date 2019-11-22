@@ -5,7 +5,7 @@
 **v2** *TODO* fbo support, better code...soon...
 ___
 
-pack **bin**, original size of *v1* is ~250kb to make it ~78kb use  `strip VKme` and `upx VKme`
+pack **bin**, after build original size of *v1* is ~250kb to make it ~78kb use  `strip VKme` and `upx VKme`
 
 **v1_1** Updated *v1* with `CMakeLists.txt` and `spirv to hex` converter. 
 
