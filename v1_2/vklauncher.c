@@ -1124,10 +1124,10 @@ static VkShaderModule demo_prepare_shader_module(struct demo *demo, const uint32
 
 #ifndef SPIRV_SHADER
 #include "yariv.h"
-uint32_t *out_spirv;
+unsigned char *out_spirv;
 size_t out_spirv_size;
 bool yarivinit = false;
-uint32_t *out_spirv_vert;
+unsigned char *out_spirv_vert;
 size_t out_spirv_size_vert;
 bool yarivinit_vert = false;
 #endif
@@ -1150,7 +1150,7 @@ static void demo_prepare_vs(struct demo *demo) {
 		yariv_decode(out_spirv_vert, out_spirv_size_vert, in_yariv, in_yariv_size);
 		printf("load shader vert...\n");
 	}
-	demo->vert_shader_module = demo_prepare_shader_module(demo, out_spirv_vert, out_spirv_size_vert); //-2 to fix uint8 size
+	demo->vert_shader_module = demo_prepare_shader_module(demo, (const uint32_t *)out_spirv_vert, out_spirv_size_vert); //-2 to fix uint8 size
 	if (!yarivinit_vert)printf("shader loaded vert...\n");
 	if (!yarivinit_vert)yarivinit_vert = true;
 #endif
@@ -1174,7 +1174,7 @@ static void demo_prepare_fs(struct demo *demo) {
 		yariv_decode(out_spirv, out_spirv_size, in_yariv, in_yariv_size);
 		printf("load shader frag...\n");
 	}
-	demo->frag_shader_module = demo_prepare_shader_module(demo, out_spirv, out_spirv_size); //-2 to fix uint8 size
+	demo->frag_shader_module = demo_prepare_shader_module(demo, (const uint32_t *)out_spirv, out_spirv_size); //-2 to fix uint8 size
 	if (!yarivinit)printf("shader loaded frag...\n");
 	if (!yarivinit)yarivinit = true;
 #endif
