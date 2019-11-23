@@ -6,7 +6,14 @@ ___
 **v2** *TODO* fbo support, better code...soon...
 ___
 
-pack **bin**, after build original size of *v1* is ~250kb to make it ~78kb use  `strip VKme` and `upx VKme`
+pack **bin** for *v1_2* after build original size of *v1_2* is ~150kb to make it ~51kb use `strip VKme` and `upx VKme`
+
+**v1_2** Updated *v1_1* with [yari-v](https://github.com/sheredom/yari-v) shader compression. Changes in *vklauncher.c* at `#define SPIRV_SHADER`.
+
+To pack shader `*.spv to *.yariv` build *main.c* in *yariv* folder, using its `CMakeLists.txt` and move  result `yariv_pack` file at `yariv_to_hex.py` location, then launch *v1_2* building.
+___
+
+pack **bin**, after build original size of *v1* is ~250kb to make it ~78kb use `strip VKme` and `upx VKme`
 
 **v1_1** Updated *v1* with `CMakeLists.txt` and `spirv to hex` converter. 
 
