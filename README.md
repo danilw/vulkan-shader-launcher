@@ -17,7 +17,7 @@ ___
 
 **v1** minimal launcher for my mini "shader game", everything in single shader using loop for draw. Build:
 ```
-gcc -m64 -lm -lxcb -O3 -lvulkan -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme
+gcc -s -m64 -lm -lxcb -O3 -lvulkan -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme
 ```
 
 **v1 binary build link** Win64 and Linux64 [Download](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/v1.zip) (compressed build with *upx* and *yari-v*)
