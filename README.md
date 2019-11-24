@@ -20,6 +20,11 @@ ___
 gcc -s -m64 -lm -lxcb -O3 -lvulkan -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme
 ```
 
+Build with mingw64(*vulkan-1.dll* from VulkanSDK):
+```
+x86_64-w64-mingw32-gcc -s -lm -O3 -lvulkan-1 -mwindows -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme.exe
+```
+
 **v1 binary build link** Win64 and Linux64 [Download](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/v1.zip) (compressed build with *upx* and *yari-v*)
 
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
