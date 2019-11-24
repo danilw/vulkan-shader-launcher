@@ -27,7 +27,7 @@ add_executable(
 )
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
-  add_definitions(/Wall /WX /wd4514)
+  add_definitions(-DVK_USE_PLATFORM_WIN32_KHR /Wall /MD /O1 /Ob1 /DNDEBUG)
   target_link_libraries(VKme ${Vulkan_LIBRARY})
 elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
   function(shader_compile SHADER_SOURCE)
