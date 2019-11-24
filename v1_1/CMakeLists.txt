@@ -27,7 +27,7 @@ add_executable(
 )
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
-  add_definitions(-DVK_USE_PLATFORM_WIN32_KHR /Wall /MD /O1 /Ob1 /DNDEBUG)
+  add_definitions(-DVK_USE_PLATFORM_WIN32_KHR /Wall)
   target_link_libraries(VKme ${Vulkan_LIBRARY})
 elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
   function(shader_compile SHADER_SOURCE)
@@ -39,7 +39,8 @@ elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
 
   shader_compile("main.vert")
   shader_compile("main.frag")
-
+  
+  add_definitions(-DVK_USE_PLATFORM_XCB_KHR -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections)
   target_link_libraries(VKme m xcb ${Vulkan_LIBRARY})
 else()
   message(WARNING "Unknown compiler '${CMAKE_C_COMPILER_ID}'!")
