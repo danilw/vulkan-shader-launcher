@@ -15,11 +15,12 @@ ___
 
 **v1_1** Updated *v1* with `CMakeLists.txt` and `spirv to hex` converter. 
 
-**v1** minimal launcher for my mini "shader game", everything in single shader using loop for draw. Build:
+**v1** minimal launcher for my mini "shader game", everything in single shader using loop for draw. 
+
+Build:
 ```
 gcc -s -m64 -lm -lxcb -O3 -lvulkan -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme
 ```
-
 Build with mingw64(*vulkan-1.dll* from VulkanSDK):
 ```
 x86_64-w64-mingw32-gcc -s -lm -O3 -lvulkan-1 -mwindows -fdata-sections -ffunction-sections -Wl,--gc-sections vklauncher.c -o VKme.exe
