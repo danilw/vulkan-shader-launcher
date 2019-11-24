@@ -42,7 +42,7 @@ elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
   shader_compile("main.vert")
   shader_compile("main.frag")
   
-  add_definitions(-DVK_USE_PLATFORM_XCB_KHR -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections)
+  add_definitions(-s -DVK_USE_PLATFORM_XCB_KHR -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections)
   target_link_libraries(VKme m xcb ${Vulkan_LIBRARY})
 else()
   message(WARNING "Unknown compiler '${CMAKE_C_COMPILER_ID}'!")
