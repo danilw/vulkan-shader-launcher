@@ -1,4 +1,4 @@
-# vulkan_shader_launcher
+# vulkan shader launcher
 
 **what is it** creating simple minimal "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else)
 
