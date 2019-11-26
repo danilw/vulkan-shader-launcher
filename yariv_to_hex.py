@@ -25,7 +25,7 @@ subprocess.call([spirvcompiler,'-V',inputfilepath,'-o',inputfilepath + '.spv'])
 subprocess.call([yariv_pack,inputfilepath + '.spv'])
 
 infile = open(inputfilepath + '.yariv', 'rb')
-outfilepath = os.path.join(outdir,outputname + '.inc')
+outfilepath = os.path.join(outdir,outputname + '.hex')
 outfile = open(outfilepath, 'w')
 
 

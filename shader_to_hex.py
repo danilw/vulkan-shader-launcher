@@ -19,7 +19,7 @@ if os.name == 'nt':
 subprocess.call([spirvcompiler,'-V',inputfilepath,'-o',inputfilepath + '.spv'])
 
 infile = open(inputfilepath + '.spv', 'rb')
-outfilepath = os.path.join(outdir,outputname + '.inc')
+outfilepath = os.path.join(outdir,outputname + '.hex')
 outfile = open(outfilepath, 'w')
 
 

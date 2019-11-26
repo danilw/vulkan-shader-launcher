@@ -1122,7 +1122,7 @@ static VkShaderModule demo_prepare_shader_module(struct demo *demo, const uint32
 
 static void demo_prepare_vs(struct demo *demo) {
 	const unsigned char vs_code[] = {
-#include "main.vert.inc"
+#include "main.vert.hex"
 	};
 	demo->vert_shader_module = demo_prepare_shader_module(demo, (const uint32_t *)vs_code, sizeof(vs_code));
 }
@@ -1139,7 +1139,7 @@ bool yarivinit = false;
 
 static void demo_prepare_fs(struct demo *demo) {
 	const unsigned char fs_code[] = {
-#include "main.frag.inc"
+#include "main.frag.hex"
 	};
 	//SPIRV
 #ifdef SPIRV_SHADER
