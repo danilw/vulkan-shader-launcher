@@ -4,6 +4,8 @@
 
 Dependencies - only vulkan library(sdk), and win32/X11 for windows and keyboard/mouse control. Optional pthread, OpenAL.
 
+Source of code - cube-demo from VulkanSDK, and [vktut](https://github.com/ShabbyX/vktut)
+
 ___
 
 **v2** *TODO* fbo support, better code...soon...
