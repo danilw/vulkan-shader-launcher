@@ -8,8 +8,18 @@ Source of code - cube-demo from VulkanSDK, and [vktut](https://github.com/Shabby
 
 ___
 
-**v2** *TODO* fbo support, better code...soon...
+*v2*
+
+*TODO* 
+
+**v2_2** threads suport for GPU rendering
+
+**v2_1** command line options, load external `*.srp` files and support shadertoy-like logic(almost full shadertoy support)
+
+**v2** fbo support, better code...soon...almost finished
+
 ___
+*v1* finished, is single shader launcher
 
 pack **bin** to have ~50kb bin size use `upx`
 
