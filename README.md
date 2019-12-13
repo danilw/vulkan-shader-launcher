@@ -14,7 +14,7 @@ ___
 
 **v2_2** threads suport for GPU rendering
 
-**v2_1** command line options, load external `*.srp` files and support shadertoy-like logic(almost full shadertoy support)
+**v2_1** command line options, load external `*.spv` files and support shadertoy-like logic(almost full shadertoy support)
 
 **v2** fbo support, better code...soon...almost finished
 
