@@ -12,7 +12,7 @@ ___
 
 *TODO* 
 
-**v2_1** command line options, load external `*.spv` files, load textures, filtering options
+**v2_1** command line options (.conf file), load external `*.spv` files, load textures, filtering options
 
 **v2** fbo support, better code...soon...almost finished
 
