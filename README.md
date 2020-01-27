@@ -1,5 +1,7 @@
 # vulkan shader launcher
 
+Warning, this is old code, do not use it! use updated project code https://github.com/danilw/vulkan-shader-launcher
+
 **what is it** creating simple minimal "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else)
 
 Dependencies - only vulkan library(sdk), and win32/X11 for windows and keyboard/mouse control. Optional pthread, OpenAL.
@@ -10,11 +12,7 @@ ___
 
 *v2*
 
-*TODO* 
-
-**v2_1** command line options (.conf file), load external `*.spv` files, load textures, filtering options
-
-**v2** fbo support, better code...soon...almost finished
+use new updated code
 
 ___
 *v1* finished, is single shader launcher
