@@ -22,7 +22,7 @@ Build with mingw64 (*vulkan-1.dll* from VulkanSDK):
 
 **Binary build link** Win64 and Linux64 [Download]() (compressed build with *upx* and *yari-v*)
 
-old code removed, everything udated, old code can be found [link](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/vulkan-shader-launcher_old.zip)
+*old code removed, everything udated, old code can be found* [link](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/vulkan-shader-launcher_old.zip)
 
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 
