@@ -2,9 +2,11 @@
 
 **what is it** creating simple minimal "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else)
 
-Dependencies - only vulkan library(sdk), and win32/X11 for windows and keyboard/mouse control.
+**Dependencies** - only vulkan library(sdk), and win32/X11 for window and keyboard/mouse control.
 
-Source of code - cube-demo from VulkanSDK, and [vktut](https://github.com/ShabbyX/vktut)
+**Source of code** - cube-demo from VulkanSDK, and [vktut](https://github.com/ShabbyX/vktut)
+
+**Compiler/platform support** - VisualStudio, GCC, Mingw. OS Windows and Linux(X11)
 
 ___
 
