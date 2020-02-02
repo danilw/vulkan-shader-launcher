@@ -33,7 +33,7 @@ make
 
 Build (linux):
 ```
-
+gcc -DVK_USE_PLATFORM_XCB_KHR -O2 -s -lm -lxcb -lvulkan ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample
 ```
 Build with mingw64 (*vulkan-1.dll* from VulkanSDK, use your system path, *vulkan.h* in system(cygwin or native) path):
 ```
