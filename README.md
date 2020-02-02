@@ -8,7 +8,7 @@
 
 **Compiler/platform support** - VisualStudio, GCC, Mingw. OS Windows and Linux(X11)
 
-All binary builds in single zip. **Binary build download link** Windows **[Download Win64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples.zip)** and Linux **[Download Linux64]()**
+All binary builds in single zip. **Binary build download link** Windows **[Download Win64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples.zip)** and Linux **[Download Linux64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples_linux.zip)**
 
 ___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause.
@@ -21,6 +21,13 @@ ___
 
 ___
 **Use cmake to build.**
+```
+cd example_minimal
+mkdir build
+cd build
+cmake ..
+make
+```
 
 *Building without cmake:*
 
