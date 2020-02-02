@@ -1,4 +1,3 @@
-// Danil, 2020 Vulkan shader launcher, self https://github.com/danilw/vulkan-shader-launcher
 
 static void print_modifiers(uint32_t mask)
 {
