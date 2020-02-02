@@ -44,6 +44,8 @@ x86_64-w64-mingw32-gcc -DVK_USE_PLATFORM_WIN32_KHR -O3 -s -lm -mwindows ../vk_ut
 
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 
-**Images:** 
+**Video:** 
 
 [![youtube](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/v1yt.jpg)](https://youtu.be/5Wzj-GNAo6c)
+
+**Images:** 
