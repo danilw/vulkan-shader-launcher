@@ -1,5 +1,4 @@
 
-//NEED TEST add imouse click pos
 void process_msg(MSG *msg, bool *done){
 	static bool mouse_click[2]={false, false}; //click once control
 	if (msg->message == WM_QUIT)
