@@ -6,7 +6,7 @@
 
 **Source of code** - cube-demo from VulkanSDK, and [vktut](https://github.com/ShabbyX/vktut)
 
-**Compiler/platform support** - VisualStudio, GCC, Mingw. OS Windows and Linux(X11)
+**Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11)
 
 All binary builds in single zip. **Binary build download link** Windows **[Download Win64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples.zip)** and Linux **[Download Linux64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples_linux.zip)**
 
@@ -31,11 +31,11 @@ make
 
 *Building without cmake:*
 
-Build (linux):
+Build **gcc** (linux): (to build with *clang* change *gcc* to *clang*)
 ```
 gcc -DVK_USE_PLATFORM_XCB_KHR -O2 -s -lm -lxcb -lvulkan ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample
 ```
-Build with mingw64 (*vulkan-1.dll* from VulkanSDK, use your system path, *vulkan.h* in system(cygwin or native) path):
+Build with **mingw64** (*vulkan-1.dll* from VulkanSDK, use your system path, *vulkan.h* in system(cygwin or native) path):
 ```
 x86_64-w64-mingw32-gcc -DVK_USE_PLATFORM_WIN32_KHR -O3 -s -lm -mwindows ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample.exe <path to>/vulkan-1.dll
 ```
