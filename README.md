@@ -13,7 +13,7 @@ All binary builds in single zip. **Binary build download link** Windows **[Downl
 ___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause.
 
-**Example game** - single shader game example, drawing many elements in vulkan-drawcall loop. Also using *yari-v* to compress shaders, and shaders build in to binary file. /<TODO soon>
+**Example game** - single shader game example, drawing many elements in vulkan-drawcall loop. Also using *yari-v* to compress shaders, and shaders build in to binary file. //<TODO soon//>
 
 **Example FBO** - [base on this shader](https://www.shadertoy.com/view/wdlGz8) single shader game(game logic on GPU) using framebuffer to store/read data, also *yari-v* and build in shaders. <TODO soon>
 
