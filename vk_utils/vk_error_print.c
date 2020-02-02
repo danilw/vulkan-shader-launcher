@@ -158,7 +158,6 @@ void print_error(FILE *fout, struct vk_error_data *error_data, const char *prefi
     
     fprintf(fout, "%s:%u: %s", error_data->file, error_data->line, prefix);
     sprintf(iout, "%s:%u: %s", error_data->file, error_data->line, prefix);
-    //sprintf(iout, "%s", prefix);
 	switch (error_data->type)
 	{
 	case VK_ERROR_VKRESULT_WARNING:
