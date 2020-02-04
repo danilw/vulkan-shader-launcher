@@ -119,7 +119,7 @@ void vk_free_graphics_buffers(struct vk_device *dev, struct vk_graphics_buffers 
 		VkRenderPass render_pass);
 
 vk_error vk_make_graphics_layouts(struct vk_device *dev, struct vk_layout *layouts, uint32_t layout_count);
-vk_error vk_make_graphics_pipelines(struct vk_device *dev, struct vk_pipeline *pipelines, uint32_t pipeline_count);
+vk_error vk_make_graphics_pipelines(struct vk_device *dev, struct vk_pipeline *pipelines, uint32_t pipeline_count, bool is_blend);
 
 void vk_free_layouts(struct vk_device *dev, struct vk_layout *layouts, uint32_t layout_count);
 void vk_free_pipelines(struct vk_device *dev, struct vk_pipeline *pipelines, uint32_t pipeline_count);

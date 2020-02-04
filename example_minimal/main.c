@@ -234,7 +234,7 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
 		.thread_count = 1,
 	};
 
-	retval = vk_make_graphics_pipelines(dev, &render_data->main_pipeline, 1);
+	retval = vk_make_graphics_pipelines(dev, &render_data->main_pipeline, 1, false);
 	if (!vk_error_is_success(&retval))
 	{
 		vk_error_printf(&retval, "Could not create graphics pipeline\n");

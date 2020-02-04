@@ -959,7 +959,7 @@ vk_error vk_make_graphics_layouts(struct vk_device *dev, struct vk_layout *layou
 	return retval;
 }
 
-vk_error vk_make_graphics_pipelines(struct vk_device *dev, struct vk_pipeline *pipelines, uint32_t pipeline_count)
+vk_error vk_make_graphics_pipelines(struct vk_device *dev, struct vk_pipeline *pipelines, uint32_t pipeline_count, bool is_blend)
 {
 	uint32_t successful = 0;
 	vk_error retval = VK_ERROR_NONE;
@@ -1017,13 +1017,21 @@ vk_error vk_make_graphics_pipelines(struct vk_device *dev, struct vk_pipeline *p
 		};
 		VkPipelineColorBlendAttachmentState color_blend_attachments[1] = {
 			[0] = {
-				.blendEnable = false,
+				.blendEnable = is_blend,
 				.colorWriteMask = VK_COLOR_COMPONENT_R_BIT
 						| VK_COLOR_COMPONENT_G_BIT
 						| VK_COLOR_COMPONENT_B_BIT
 						| VK_COLOR_COMPONENT_A_BIT,
 			},
 		};
+        if(is_blend){
+            color_blend_attachments[0].srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            color_blend_attachments[0].dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            color_blend_attachments[0].colorBlendOp = VK_BLEND_OP_ADD;
+            color_blend_attachments[0].srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            color_blend_attachments[0].dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+            color_blend_attachments[0].alphaBlendOp = VK_BLEND_OP_ADD;
+        }
 		VkPipelineColorBlendStateCreateInfo color_blend_state = {
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
 			.attachmentCount = 1,
