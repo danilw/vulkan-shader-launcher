@@ -36,7 +36,7 @@ add_custom_command(TARGET Vkexample_game POST_BUILD
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
 
-  add_definitions(-DVK_USE_PLATFORM_WIN32_KHR )
+  add_definitions(-DVK_USE_PLATFORM_WIN32_KHR -DYARIV_SHADER )
   target_link_libraries(Vkexample_game ${Vulkan_LIBRARY})
 elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
 
