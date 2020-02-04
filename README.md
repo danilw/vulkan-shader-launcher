@@ -11,6 +11,9 @@
 All binary builds in single zip. **Binary build download link** Windows **[Download Win64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples.zip)** and Linux **[Download Linux64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples_linux.zip)**
 
 ___
+**Features** - framebuffers binding, resize support, minimize support, surfaces, blend, loading images, saving frames... and other look examples they display some of features.
+
+___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause. Binary build(exe) 26kb size.
 
 **Example game** - single shader game example, drawing many elements in vulkan-drawcall loop, using Blend to draw mix color. Also using *yari-v* to compress shaders, and shaders build in to binary file. This example on video [youtube link](https://youtu.be/5Wzj-GNAo6c).
