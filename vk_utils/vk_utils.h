@@ -40,6 +40,10 @@
 #endif
 #include "vk_struct.h"
 
+#ifdef YARIV_SHADER
+#include "../yariv/yariv.h"
+#endif
+
 void vk_exit(VkInstance vk);
 
 vk_error vk_enumerate_devices(VkInstance vk, struct vk_physical_device *devs, uint32_t *count);
@@ -48,7 +52,11 @@ vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *d
 
 void vk_cleanup(struct vk_device *dev);
 
-vk_error vk_load_shader(struct vk_device *dev, const char *spirv_file, VkShaderModule *shader);
+vk_error vk_load_shader(struct vk_device *dev, const uint32_t *code, VkShaderModule *shader, size_t size);
+#ifdef YARIV_SHADER
+vk_error vk_load_shader_yariv(struct vk_device *dev, const uint32_t *yariv_code, VkShaderModule *shader, size_t in_yariv_size);
+#endif
+vk_error vk_load_shader_spirv_file(struct vk_device *dev, const char *spirv_file, VkShaderModule *shader);
 void vk_free_shader(struct vk_device *dev, VkShaderModule shader);
 
 uint32_t vk_find_suitable_memory(struct vk_physical_device *phy_dev, struct vk_device *dev,

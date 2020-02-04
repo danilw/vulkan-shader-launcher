@@ -142,8 +142,38 @@ void vk_cleanup(struct vk_device *dev)
 	*dev = (struct vk_device){0};
 }
 
+vk_error vk_load_shader(struct vk_device *dev, const uint32_t *code, VkShaderModule *shader, size_t size)
+{
+    vk_error retval = VK_ERROR_NONE;
+	VkResult res;
+	VkShaderModuleCreateInfo info = {
+		.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
+		.codeSize = size,
+		.pCode = code,
+	};
 
-vk_error vk_load_shader(struct vk_device *dev, const char *spirv_file, VkShaderModule *shader)
+	res = vkCreateShaderModule(dev->device, &info, NULL, shader);
+	vk_error_set_vkresult(&retval, res);
+    
+    return retval;
+}
+
+#ifdef YARIV_SHADER
+vk_error vk_load_shader_yariv(struct vk_device *dev, const uint32_t *yariv_code, VkShaderModule *shader, size_t in_yariv_size)
+{
+    vk_error retval = VK_ERROR_NONE;
+    void *in_yariv = (void *)yariv_code;
+    size_t out_spirv_size = yariv_decode_size(in_yariv, in_yariv_size);
+    uint32_t *out_spirv = malloc(out_spirv_size);
+    yariv_decode(out_spirv, out_spirv_size, in_yariv, in_yariv_size);
+    retval = vk_load_shader(dev, out_spirv, shader, out_spirv_size);
+    
+    free(out_spirv);
+    return retval;
+}
+#endif
+
+vk_error vk_load_shader_spirv_file(struct vk_device *dev, const char *spirv_file, VkShaderModule *shader)
 {
 	vk_error retval = VK_ERROR_NONE;
 	VkResult res;
@@ -183,15 +213,8 @@ vk_error vk_load_shader(struct vk_device *dev, const char *spirv_file, VkShaderM
 		}
 		cur += read;
 	}
-
-	VkShaderModuleCreateInfo info = {
-		.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-		.codeSize = size,
-		.pCode = (uint32_t*)code,
-	};
-
-	res = vkCreateShaderModule(dev->device, &info, NULL, shader);
-	vk_error_set_vkresult(&retval, res);
+    
+    retval = vk_load_shader(dev, (uint32_t*)code, shader, size);
 
 	free(code);
 	fclose(fin);
@@ -743,7 +766,7 @@ vk_error vk_load_shaders(struct vk_device *dev,
 
 	for (uint32_t i = 0; i < shader_count; ++i)
 	{
-		err = vk_load_shader(dev, shaders[i].spirv_file, &shaders[i].shader);
+		err = vk_load_shader_spirv_file(dev, shaders[i].spirv_file, &shaders[i].shader);
 		vk_error_sub_merge(&retval, &err);
 		if (!vk_error_is_success(&err))
 			continue;
