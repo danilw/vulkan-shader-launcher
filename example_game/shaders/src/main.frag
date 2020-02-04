@@ -6,32 +6,32 @@
 
 layout (location = 0) in vec2 frag_pos;
 
-layout (push_constant) uniform push_constants
+layout (push_constant) uniform push_constants // <128bytes
 {
 	vec4 u_Mouse;
-	vec4 u_Date;
+	//vec4 u_Date;
     vec4 u_dataxx;
     vec4 hpdata;
     vec2 draw_id;
     vec2 draw_pos_g;
     vec2 u_valt;
     vec2 utmp;
-	bvec2 u_Mouse_lr; //is mouse left[0], right[1] clicked
+	//bvec2 u_Mouse_lr;
 	vec2 u_Resolution;
 	bool u_debugdraw;
 	bool u_pause;
 	float u_Time;
-	float u_TimeDelta;
-	int u_Frame;
+	//float u_TimeDelta;
+	//int u_Frame;
     float FPS;
 } constants;
 
 vec3 iResolution=vec3(constants.u_Resolution,1.);
 float iTime=constants.u_Time;
-float iTimeDelta=constants.u_TimeDelta;
-int iFrame=constants.u_Frame;
+//float iTimeDelta=constants.u_TimeDelta;
+//int iFrame=constants.u_Frame;
 vec4 iMouse=constants.u_Mouse;
-vec4 iDate=constants.u_Date;
+//vec4 iDate=constants.u_Date;
 bool is_debugdraw=constants.u_debugdraw;
 bool is_pause=constants.u_pause;
 vec2 draw_id=constants.draw_id;

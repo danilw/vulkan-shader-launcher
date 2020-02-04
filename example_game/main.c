@@ -29,9 +29,9 @@ const unsigned char vs_code[] = {
 
 #include "engine.h"
 
-struct shaders_uniforms{ //same to shadertoy
+struct shaders_uniforms{ //to avoid 128bytes limit maxPushConstantsSize removed unused data
 	float iMouse[4];//iMouse.xy updated always
-	float iDate[4];
+	//float iDate[4];
     
     float u_dataxx[4];
     float hpdata[4];
@@ -40,13 +40,13 @@ struct shaders_uniforms{ //same to shadertoy
     float u_valt[2];
     float utmp[2];
     
-	int iMouse_lr[2]; //is mouse left[0], right[1] clicked
+	//int iMouse_lr[2]; //is mouse left[0], right[1] clicked
 	float iResolution[2];
 	int debugdraw;
 	int pause;
 	float iTime;
-	float iTimeDelta;
-	int iFrame;
+	//float iTimeDelta;
+	//int iFrame;
     
     float FPS;
 };
@@ -488,18 +488,18 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
         .iResolution[0]=os_window->app_data.iResolution[0],
         .iResolution[1]=os_window->app_data.iResolution[1],
         .iTime=os_window->app_data.iTime,
-        .iTimeDelta=os_window->app_data.iTimeDelta,
-        .iFrame=os_window->app_data.iFrame,
+        //.iTimeDelta=os_window->app_data.iTimeDelta,
+        //.iFrame=os_window->app_data.iFrame,
         .iMouse[0]=os_window->app_data.iMouse[0],
         .iMouse[1]=os_window->app_data.iMouse[1],
         .iMouse[2]=os_window->app_data.iMouse_lclick[0],
         .iMouse[3]=os_window->app_data.iMouse_lclick[1],
-        .iMouse_lr[0]=(int)os_window->app_data.iMouse_click[0],
-        .iMouse_lr[1]=(int)os_window->app_data.iMouse_click[1],
-        .iDate[0]=my_time.year,
-        .iDate[1]=my_time.month,
-        .iDate[2]=my_time.day,
-        .iDate[3]=day_sec,
+        //.iMouse_lr[0]=(int)os_window->app_data.iMouse_click[0],
+        //.iMouse_lr[1]=(int)os_window->app_data.iMouse_click[1],
+        //.iDate[0]=my_time.year,
+        //.iDate[1]=my_time.month,
+        //.iDate[2]=my_time.day,
+        //.iDate[3]=day_sec,
         .debugdraw=(int)os_window->app_data.drawdebug,
         .pause=(int)os_window->app_data.pause,
     };
