@@ -38,7 +38,7 @@ Build with **gcc** (linux): (to build with *clang* change *gcc* to *clang*)
 ```
 gcc -DVK_USE_PLATFORM_XCB_KHR -O2 -s -lm -lxcb -lvulkan ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample
 ```
-Build with **mingw64** (*vulkan-1.dll* from VulkanSDK, use your system path, *vulkan.h* in system(cygwin or native) path):
+Build with **mingw64** (*vulkan-1.dll* from VulkanSDK, *vulkan.h* in system(cygwin or native) path):
 ```
 x86_64-w64-mingw32-gcc -DVK_USE_PLATFORM_WIN32_KHR -O3 -s -lm -mwindows ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample.exe <path to>/vulkan-1.dll
 ```
