@@ -452,7 +452,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
             sizeof render_data.push_constants, &render_data.push_constants);
 
 	vkCmdDraw(essentials.cmd_buffer, 4, 1, 0, 0);
-	//vkCmdDrawIndexed(essentials.cmd_buffer, 4, 1, 4, 0, 0);
+	//vkCmdDrawIndexed(essentials.cmd_buffer, 4, 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(essentials.cmd_buffer);
 
