@@ -95,27 +95,26 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
 	vk_error retval = VK_ERROR_NONE;
 	VkResult res;
 	
-
-	render_data->buffers[BUFFER_VERTICES] = (struct vk_buffer){
-		.size = sizeof render_data->objects.vertices,
-		.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-		.host_visible = false,
-	};
-
-	render_data->buffers[BUFFER_INDICES] = (struct vk_buffer){
-		.size = sizeof render_data->objects.indices,
-		.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-		.host_visible = false,
-	};
-
-	retval = vk_create_buffers(phy_dev, dev, render_data->buffers, 2);
-	if (!vk_error_is_success(&retval))
-	{
-		vk_error_printf(&retval, "Failed to create vertex, index and transformation buffers\n");
-		return retval;
-	}
-	
 	if(!load_once){
+		render_data->buffers[BUFFER_VERTICES] = (struct vk_buffer){
+			.size = sizeof render_data->objects.vertices,
+			.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+			.host_visible = false,
+		};
+
+		render_data->buffers[BUFFER_INDICES] = (struct vk_buffer){
+			.size = sizeof render_data->objects.indices,
+			.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+			.host_visible = false,
+		};
+
+		retval = vk_create_buffers(phy_dev, dev, render_data->buffers, 2);
+		if (!vk_error_is_success(&retval))
+		{
+			vk_error_printf(&retval, "Failed to create vertex, index and transformation buffers\n");
+			return retval;
+		}
+	
 		render_data->objects = (struct objects){
 			.vertices = {
 				[0] = (struct vertex){ .pos = { 1.0,  1.0, 0.0}, },
@@ -127,14 +126,14 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
 				0, 1, 2, 3,
 			},
 		};
-	}
 
-	retval = vk_render_init_buffer(phy_dev, dev, essentials, &render_data->buffers[BUFFER_VERTICES], render_data->objects.vertices, "vertex");
-	if (!vk_error_is_success(&retval))
-		return retval;
-	retval = vk_render_init_buffer(phy_dev, dev, essentials, &render_data->buffers[BUFFER_INDICES], render_data->objects.indices, "index");
-	if (!vk_error_is_success(&retval))
-		return retval;
+		retval = vk_render_init_buffer(phy_dev, dev, essentials, &render_data->buffers[BUFFER_VERTICES], render_data->objects.vertices, "vertex");
+		if (!vk_error_is_success(&retval))
+			return retval;
+		retval = vk_render_init_buffer(phy_dev, dev, essentials, &render_data->buffers[BUFFER_INDICES], render_data->objects.indices, "index");
+		if (!vk_error_is_success(&retval))
+			return retval;
+	}
 
 	if((!load_once)||(reload_shaders)){
 		render_data->shaders[SHADER_MAIN_VERTEX] = (struct vk_shader){
@@ -335,7 +334,6 @@ static bool on_window_resize(struct vk_physical_device *phy_dev, struct vk_devic
 	vk_free_pipelines(dev, &render_data->main_pipeline, 1);
 	vk_free_graphics_buffers(dev, render_data->main_gbuffers, essentials->image_count, render_data->main_render_pass);
 	vk_free_layouts(dev, &render_data->main_layout, 1);
-	vk_free_buffers(dev, render_data->buffers, 2);
 	
 	if(os_window->reload_shaders_on_resize)
 		vk_free_shaders(dev, render_data->shaders, 2);
