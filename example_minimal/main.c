@@ -664,7 +664,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
         return retval;
 	}
 
-	res = vk_setup(&phy_dev, &dev, VK_QUEUE_GRAPHICS_BIT);
+	res = vk_setup(&phy_dev, &dev, VK_QUEUE_GRAPHICS_BIT, 1);
 	if (vk_error_is_error(&res))
 	{
 		vk_error_printf(&res, "Could not setup logical device, command pools and queues\n");
