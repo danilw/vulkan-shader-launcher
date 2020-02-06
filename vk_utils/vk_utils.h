@@ -48,7 +48,7 @@ void vk_exit(VkInstance vk);
 
 vk_error vk_enumerate_devices(VkInstance vk, struct vk_physical_device *devs, uint32_t *count);
 
-vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *dev, VkDeviceQueueCreateInfo queue_info[], uint32_t queue_info_count);
+vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *dev, VkDeviceQueueCreateInfo queue_info[], uint32_t queue_info_count, uint32_t create_count);
 
 void vk_cleanup(struct vk_device *dev);
 
@@ -89,7 +89,7 @@ static inline vk_error vk_get_dev(struct vk_physical_device *phy_dev, struct vk_
 			sizeof extension_names / sizeof *extension_names);
 }
 
-static vk_error vk_setup(struct vk_physical_device *phy_dev, struct vk_device *dev, VkQueueFlags qflags)
+static vk_error vk_setup(struct vk_physical_device *phy_dev, struct vk_device *dev, VkQueueFlags qflags, uint32_t create_count)
 {
 	VkDeviceQueueCreateInfo queue_info[VK_MAX_QUEUE_FAMILY];
 	uint32_t queue_info_count = 0;
@@ -97,7 +97,10 @@ static vk_error vk_setup(struct vk_physical_device *phy_dev, struct vk_device *d
 	queue_info_count = phy_dev->queue_family_count;
 	vk_error res = vk_get_dev(phy_dev, dev, qflags, queue_info, &queue_info_count);
 	if (vk_error_is_success(&res))
-		res = vk_get_commands(phy_dev, dev, queue_info, queue_info_count);
+	{
+		if(create_count<=queue_info[0].queueCount)create_count=0; //0=create one cmd_buffer per Queue
+		res = vk_get_commands(phy_dev, dev, queue_info, queue_info_count, create_count);
+	}
 	return res;
 
 }

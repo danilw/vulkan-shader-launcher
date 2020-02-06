@@ -65,10 +65,17 @@ vk_error vk_enumerate_devices(VkInstance vk, struct vk_physical_device *devs, ui
 }
 
 
-vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *dev, VkDeviceQueueCreateInfo queue_info[], uint32_t queue_info_count)
+vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *dev, VkDeviceQueueCreateInfo queue_info[], uint32_t queue_info_count, uint32_t create_count)
 {
 	vk_error retval = VK_ERROR_NONE;
 	VkResult res;
+	bool create_num_cmd=false; //create many cmd buffers in one Queue
+	
+	if(create_count>0)
+	{
+		queue_info_count=1;
+		create_num_cmd=true;
+	}
 
 	dev->command_pools = malloc(queue_info_count * sizeof *dev->command_pools);
 	if (dev->command_pools == NULL)
@@ -97,7 +104,11 @@ vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *d
 		++dev->command_pool_count;
 
 		cmd->queues = malloc(queue_info[i].queueCount * sizeof *cmd->queues);
-		cmd->buffers = malloc(queue_info[i].queueCount * sizeof *cmd->buffers);
+		if(!create_num_cmd){
+			cmd->buffers = malloc(queue_info[i].queueCount * sizeof *cmd->buffers);
+		}else {
+			cmd->buffers = malloc(create_count * sizeof *cmd->buffers);
+		}
 		if (cmd->queues == NULL || cmd->buffers == NULL)
 		{
 			vk_error_set_errno(&retval, errno);
@@ -111,7 +122,7 @@ vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *d
 		VkCommandBufferAllocateInfo buffer_info = {
 			.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
 			.commandPool = cmd->pool,
-			.commandBufferCount = queue_info[i].queueCount,
+			.commandBufferCount = create_num_cmd?create_count:queue_info[i].queueCount,
 		};
 
 		res = vkAllocateCommandBuffers(dev->device, &buffer_info, cmd->buffers);
@@ -119,7 +130,7 @@ vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *d
 		if (res)
 			return retval;
 
-		cmd->buffer_count = queue_info[i].queueCount;
+		cmd->buffer_count = create_num_cmd?create_count:queue_info[i].queueCount;
 	}
     return retval;
 
