@@ -18,7 +18,7 @@ ___
 
 **Example game** - single shader game example, drawing many elements in vulkan-drawcall loop, using Blend to draw mix color. Also using *yari-v* to compress shaders, and shaders build in to binary file. This example on video [youtube link](https://youtu.be/5Wzj-GNAo6c).
 
-**Example FBO** - [base on this shader](https://www.shadertoy.com/view/wdlGz8) single shader game(game logic on GPU) using framebuffer to store/read data, also *yari-v* and build in shaders. \<TODO soon\>
+**Example FBO** - [base on this shader](https://www.shadertoy.com/view/3syXDD) single shader game(game logic on GPU) using framebuffer to store/read data, also *yari-v* and build in shaders. \<TODO soon\>
 
 **Example shadertoy launcher** - proper launcher for shadertoy shaders, 4 framebuffers, texture support. \<TODO last\>
 
