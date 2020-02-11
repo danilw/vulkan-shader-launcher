@@ -23,6 +23,8 @@ ___
 **Example shadertoy launcher** - proper launcher for shadertoy shaders, 4 framebuffers, texture support. \<TODO\>
 
 ___
+# Building
+
 **Use cmake to build.**
 ```
 cd example_minimal
