@@ -20,6 +20,10 @@ ___
 
 **Example FBO** - [base on this shader](https://www.shadertoy.com/view/3syXDD) game that on *screenshot*, game logic on GPU, using framebuffer to store/read data, also *yari-v* and build in shaders.
 
+**Example images** - imgages/textures loading \<TODO\>
+
+**Example validation** - connect Vulkan validation layers to this code. \<TODO\>
+
 **Example shadertoy launcher** - proper launcher for shadertoy shaders, 4 framebuffers, texture support. \<TODO\>
 
 ___
