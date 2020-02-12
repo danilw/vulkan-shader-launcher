@@ -367,6 +367,20 @@ void update_params(struct app_data_struct *app_data, bool fps_lock){
 	float pause_time=pres_pause(app_data->pause);
 }
 
+void print_fps(struct app_os_window *os_window){
+    if(os_window->print_debug){
+        static int fps_counter=0;
+        static float tdelta=0;
+        if(tdelta==0)tdelta=os_window->app_data.iTimeDelta;
+        tdelta=(tdelta+os_window->app_data.iTimeDelta)/2.0;
+        fps_counter=(fps_counter+1)%30;
+        if(fps_counter==0){
+            printf("fps: %d\n", (int)(1.0/tdelta));
+            tdelta=0;
+        }
+    }
+}
+
 static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_device *dev, struct vk_swapchain *swapchain, struct app_os_window *os_window)
 {
     int res;
@@ -474,6 +488,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
 		return false;
 	
 	update_params(&os_window->app_data,os_window->fps_lock);
+    print_fps(os_window);
 	return true;
 	
 }
