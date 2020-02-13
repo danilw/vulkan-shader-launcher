@@ -32,7 +32,7 @@ ___
 ___
 # Building
 
-**Use cmake to build.**
+**Use cmake to build.** In Windows VS press *open Cmake*.
 ```
 cd example_minimal
 mkdir build
