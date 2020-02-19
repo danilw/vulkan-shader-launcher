@@ -23,7 +23,7 @@ ___
 
 **Example FBO** - [base on this shader](https://www.shadertoy.com/view/3syXDD) game that on *screenshot*, game logic on GPU, using framebuffer to store/read data, also *yari-v* and build in shaders.
 
-**Example images** - imgages/textures loading and saving to image(current frame). [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps (mipmaps will be added latter (TODO))
+**Example images** - imgages/textures loading. [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps (mipmaps will be added latter (TODO))
 
 **Example validation** - connect Vulkan validation layers to this code. \<TODO\>
 
