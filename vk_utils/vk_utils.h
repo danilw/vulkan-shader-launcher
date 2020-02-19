@@ -114,7 +114,7 @@ void vk_free_swapchain(VkInstance vk, struct vk_device *dev, struct vk_swapchain
 VkImage *vk_get_swapchain_images(struct vk_device *dev, struct vk_swapchain *swapchain, uint32_t *count);
 
 vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *dev,
-		struct vk_image *images, uint32_t image_count);
+		struct vk_image *images, uint32_t image_count, bool anisotropyEnable, VkSamplerAddressMode repeat_mode);
 vk_error vk_create_buffers(struct vk_physical_device *phy_dev, struct vk_device *dev,
 		struct vk_buffer *buffers, uint32_t buffer_count);
 vk_error vk_load_shaders(struct vk_device *dev,

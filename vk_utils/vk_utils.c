@@ -552,7 +552,7 @@ VkImage *vk_get_swapchain_images(struct vk_device *dev, struct vk_swapchain *swa
 
 
 vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *dev,
-		struct vk_image *images, uint32_t image_count)
+		struct vk_image *images, uint32_t image_count, bool anisotropyEnable, VkSamplerAddressMode repeat_mode)
 {
 	uint32_t successful = 0;
 	vk_error retval = VK_ERROR_NONE;
@@ -668,10 +668,10 @@ vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *
 				.magFilter = VK_FILTER_LINEAR,
 				.minFilter = VK_FILTER_LINEAR,
 				.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-				.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-				.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-				.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-				.anisotropyEnable = true, // false
+				.addressModeU = repeat_mode,
+				.addressModeV = repeat_mode,
+				.addressModeW = repeat_mode,
+				.anisotropyEnable = anisotropyEnable, // false
 				.maxAnisotropy = phy_dev->properties.limits.maxSamplerAnisotropy,
 				.minLod = 0,
 				.maxLod = 1,
@@ -1288,7 +1288,7 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
 			.stage = VK_SHADER_STAGE_FRAGMENT_BIT,
 			.make_view = true,
 		};
-		err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].color, 1);
+		err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].color, 1, true, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 		vk_error_sub_merge(&retval, &err);
 		if (!vk_error_is_success(&err))
 			continue;
@@ -1302,7 +1302,7 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
 				.make_view = true,
 			};
 
-			err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].depth, 1);
+			err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].depth, 1, true, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 			vk_error_sub_merge(&retval, &err);
 			if (!vk_error_is_success(&err))
 				continue;
@@ -1388,7 +1388,7 @@ vk_error vk_create_graphics_buffers(struct vk_physical_device *phy_dev, struct v
 				.will_be_initialized = false,
 			};
 
-			err = vk_create_images(phy_dev, dev, &graphics_buffers[i].depth, 1);
+			err = vk_create_images(phy_dev, dev, &graphics_buffers[i].depth, 1, true, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 			vk_error_sub_merge(&retval, &err);
 			if (!vk_error_is_success(&err))
 				continue;
