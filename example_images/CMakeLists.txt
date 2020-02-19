@@ -33,6 +33,9 @@ add_executable(
 add_custom_command(TARGET Vkexample_img POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_directory
                     ${CMAKE_SOURCE_DIR}/shaders/spv $<TARGET_FILE_DIR:Vkexample_img>/shaders/spv)
+add_custom_command(TARGET Vkexample_img POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    ${CMAKE_SOURCE_DIR}/textures $<TARGET_FILE_DIR:Vkexample_img>/textures)
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
 
