@@ -64,6 +64,9 @@ struct vk_image
 	VkDeviceMemory image_mem;
 	VkImageView view;
 	VkSampler sampler;
+    bool anisotropyEnable;
+    VkSamplerAddressMode repeat_mode;
+    bool mipmaps;
 };
 
 struct vk_buffer

@@ -548,11 +548,8 @@ VkImage *vk_get_swapchain_images(struct vk_device *dev, struct vk_swapchain *swa
 	return images;
 }
 
-
-
-
 vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *dev,
-		struct vk_image *images, uint32_t image_count, bool anisotropyEnable, VkSamplerAddressMode repeat_mode)
+		struct vk_image *images, uint32_t image_count)
 {
 	uint32_t successful = 0;
 	vk_error retval = VK_ERROR_NONE;
@@ -590,14 +587,19 @@ vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *
 					}
 			}
 		}
-
+        
+        uint32_t mipLevels=1;
+        if(images[i].mipmaps){
+            mipLevels = (int)(log(MAX(images[i].extent.width, images[i].extent.height))/log(2)) + 1;
+        }
+        
 		bool shared = images[i].sharing_queue_count > 1;
 		struct VkImageCreateInfo image_info = {
 			.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
 			.imageType = VK_IMAGE_TYPE_2D,
 			.format = images[i].format,
 			.extent = {images[i].extent.width, images[i].extent.height, 1},
-			.mipLevels = 1,
+			.mipLevels = mipLevels,
 			.arrayLayers = 1,
 			.samples = samples,
 			.tiling = tiling,
@@ -668,14 +670,20 @@ vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *
 				.magFilter = VK_FILTER_LINEAR,
 				.minFilter = VK_FILTER_LINEAR,
 				.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-				.addressModeU = repeat_mode,
-				.addressModeV = repeat_mode,
-				.addressModeW = repeat_mode,
-				.anisotropyEnable = anisotropyEnable, // false
+				.addressModeU = images[i].repeat_mode,
+				.addressModeV = images[i].repeat_mode,
+				.addressModeW = images[i].repeat_mode,
+				.anisotropyEnable = images[i].anisotropyEnable, // false
 				.maxAnisotropy = phy_dev->properties.limits.maxSamplerAnisotropy,
 				.minLod = 0,
 				.maxLod = 1,
 			};
+            if(images[i].mipmaps){
+                sampler_info.maxLod = mipLevels;
+                sampler_info.mipLodBias = 0;
+                sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+                sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
+            }
 
 			res = vkCreateSampler(dev->device, &sampler_info, NULL, &images[i].sampler);
 			vk_error_sub_set_vkresult(&retval, res);
@@ -1287,8 +1295,11 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
 				| VK_IMAGE_USAGE_SAMPLED_BIT,
 			.stage = VK_SHADER_STAGE_FRAGMENT_BIT,
 			.make_view = true,
+            .anisotropyEnable = true,
+            .repeat_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+            .mipmaps = false,
 		};
-		err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].color, 1, true, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+		err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].color, 1);
 		vk_error_sub_merge(&retval, &err);
 		if (!vk_error_is_success(&err))
 			continue;
@@ -1300,9 +1311,12 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
 				.extent = offscreen_buffers[i].surface_size,
 				.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
 				.make_view = true,
+                .anisotropyEnable = true,
+                .repeat_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                .mipmaps = false,
 			};
 
-			err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].depth, 1, true, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+			err = vk_create_images(phy_dev, dev, &offscreen_buffers[i].depth, 1);
 			vk_error_sub_merge(&retval, &err);
 			if (!vk_error_is_success(&err))
 				continue;
@@ -1386,9 +1400,12 @@ vk_error vk_create_graphics_buffers(struct vk_physical_device *phy_dev, struct v
 				.make_view = true,
 				.multisample = false,
 				.will_be_initialized = false,
+                .anisotropyEnable = true,
+                .repeat_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                .mipmaps = false,
 			};
 
-			err = vk_create_images(phy_dev, dev, &graphics_buffers[i].depth, 1, true, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+			err = vk_create_images(phy_dev, dev, &graphics_buffers[i].depth, 1);
 			vk_error_sub_merge(&retval, &err);
 			if (!vk_error_is_success(&err))
 				continue;

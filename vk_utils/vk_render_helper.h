@@ -68,8 +68,11 @@ vk_error vk_render_transition_images(struct vk_device *dev, struct vk_render_ess
 		struct vk_image *images, uint32_t image_count,
 		VkImageLayout from, VkImageLayout to, VkImageAspectFlags aspect, const char *name);
 
+vk_error vk_render_transition_images_mipmaps(struct vk_physical_device *phy_dev, struct vk_device *dev, struct vk_render_essentials *essentials,
+		struct vk_image *image, VkImageAspectFlags aspect, const char *name);
+
 /*
- * Create a texture image filled with BGRA data.  This uses a command buffer, submits it, and waits for it to finish,
+ * Create a texture image.  This uses a command buffer, submits it, and waits for it to finish,
  * so it's not supposed to be used while recording a command buffer.  It creates and destroys a staging buffer in the
  * process.  In the end, it transitions the image to the desired layout.
  */

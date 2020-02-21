@@ -411,6 +411,131 @@ static vk_error create_staging_buffer(struct vk_physical_device *phy_dev, struct
 	return retval;
 }
 
+vk_error vk_render_transition_images_mipmaps(struct vk_physical_device *phy_dev, struct vk_device *dev, struct vk_render_essentials *essentials,
+		struct vk_image *image, VkImageAspectFlags aspect, const char *name)
+{
+    vk_error retval = VK_ERROR_NONE;
+    VkResult res;
+
+    VkFormatProperties formatProperties;
+    vkGetPhysicalDeviceFormatProperties(phy_dev->physical_device, image->format, &formatProperties);
+
+    if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)) {
+        printf("texture image format does not support linear blitting! %s image\n", name);
+        retval.error.type=VK_ERROR_ERRNO;
+        return retval;
+    }
+
+    vkResetCommandBuffer(essentials->cmd_buffer, 0);
+    VkCommandBufferBeginInfo begin_info = {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+    };
+    res = vkBeginCommandBuffer(essentials->cmd_buffer, &begin_info);
+    vk_error_set_vkresult(&retval, res);
+    if (res)
+    {
+        vk_error_printf(&retval, "Couldn't begin recording a command buffer to transition the %s image\n", name);
+        return retval;
+    }
+
+    int32_t mipWidth = image->extent.width;
+    int32_t mipHeight = image->extent.height;
+    uint32_t mipLevels = (int)(log(MAX(image->extent.width, image->extent.height))/log(2)) + 1;
+
+    VkImageMemoryBarrier image_barrier = {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+        .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .image = image->image,
+        .subresourceRange = {
+			.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+			.levelCount = 1,
+			.baseArrayLayer = 0,
+			.layerCount = 1,
+		},
+    };
+    
+    for (uint32_t i = 1; i < mipLevels; i++) {
+        image_barrier.subresourceRange.baseMipLevel = i - 1;
+        image_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        image_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        image_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        image_barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+        vkCmdPipelineBarrier(essentials->cmd_buffer,
+            VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0,
+            0, NULL,
+            0, NULL,
+            1, &image_barrier);
+
+        VkImageBlit blit = {};
+        blit.srcOffsets[0] = (struct VkOffset3D){.x=0, .y=0, .z=0};
+        blit.srcOffsets[1] = (struct VkOffset3D){.x=mipWidth, .y=mipHeight, .z=1};
+        blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blit.srcSubresource.mipLevel = i - 1;
+        blit.srcSubresource.baseArrayLayer = 0;
+        blit.srcSubresource.layerCount = 1;
+        blit.dstOffsets[0] = (struct VkOffset3D){.x=0, .y=0, .z=0};
+        blit.dstOffsets[1] = (struct VkOffset3D){.x=(mipWidth > 1 ? mipWidth / 2 : 1), .y=(mipHeight > 1 ? mipHeight / 2 : 1), .z=1 };
+        blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blit.dstSubresource.mipLevel = i;
+        blit.dstSubresource.baseArrayLayer = 0;
+        blit.dstSubresource.layerCount = 1;
+
+        vkCmdBlitImage(essentials->cmd_buffer,
+            image->image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            image->image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            1, &blit,
+            VK_FILTER_LINEAR);
+
+        image_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        image_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        image_barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        image_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+        vkCmdPipelineBarrier(essentials->cmd_buffer,
+            VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0,
+            0, NULL,
+            0, NULL,
+            1, &image_barrier);
+
+        if (mipWidth > 1) mipWidth /= 2;
+        if (mipHeight > 1) mipHeight /= 2;
+    }
+
+
+    vkCmdPipelineBarrier(essentials->cmd_buffer,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+        0,
+        0, NULL,
+        0, NULL,
+        1, &image_barrier);
+
+    vkEndCommandBuffer(essentials->cmd_buffer);
+
+    res = vkResetFences(dev->device, 1, &essentials->exec_fence);
+    vk_error_set_vkresult(&retval, res);
+    if (res)
+    {
+        vk_error_printf(&retval, "Failed to reset fence\n");
+        return retval;
+    }
+
+    VkSubmitInfo submit_info = {
+        .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+        .commandBufferCount = 1,
+        .pCommandBuffers = &essentials->cmd_buffer,
+    };
+
+    vkQueueSubmit(essentials->present_queue, 1, &submit_info, essentials->exec_fence);
+    res = vkWaitForFences(dev->device, 1, &essentials->exec_fence, true, 1000000000);
+    vk_error_set_vkresult(&retval, res);
+
+    return retval;
+}
+
 vk_error vk_render_init_texture(struct vk_physical_device *phy_dev, struct vk_device *dev, struct vk_render_essentials *essentials,
 		struct vk_image *image, VkImageLayout layout, uint8_t *contents, const char *name)
 {
@@ -439,8 +564,11 @@ vk_error vk_render_init_texture(struct vk_physical_device *phy_dev, struct vk_de
 	retval = vk_render_copy_buffer_to_image(dev, essentials, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &staging, &image_copy, name);
 	if (!vk_error_is_success(&retval))
 		return retval;
-
-	retval = vk_render_transition_images(dev, essentials, image, 1, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, layout, VK_IMAGE_ASPECT_COLOR_BIT, name);
+    
+    if(image->mipmaps)
+        retval = vk_render_transition_images_mipmaps(phy_dev, dev, essentials, image, VK_IMAGE_ASPECT_COLOR_BIT, name);
+    else
+        retval = vk_render_transition_images(dev, essentials, image, 1, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, layout, VK_IMAGE_ASPECT_COLOR_BIT, name);
 
 	return retval;
 }

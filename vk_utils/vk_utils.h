@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <assert.h>
+#include <math.h>
 #include "vk_error_print.h"
 #if defined(VK_USE_PLATFORM_XCB_KHR)
 #include <X11/Xutil.h>
@@ -43,6 +44,9 @@
 #ifdef YARIV_SHADER
 #include "../yariv/yariv.h"
 #endif
+
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 void vk_exit(VkInstance vk);
 
@@ -114,7 +118,7 @@ void vk_free_swapchain(VkInstance vk, struct vk_device *dev, struct vk_swapchain
 VkImage *vk_get_swapchain_images(struct vk_device *dev, struct vk_swapchain *swapchain, uint32_t *count);
 
 vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *dev,
-		struct vk_image *images, uint32_t image_count, bool anisotropyEnable, VkSamplerAddressMode repeat_mode);
+		struct vk_image *images, uint32_t image_count);
 vk_error vk_create_buffers(struct vk_physical_device *phy_dev, struct vk_device *dev,
 		struct vk_buffer *buffers, uint32_t buffer_count);
 vk_error vk_load_shaders(struct vk_device *dev,

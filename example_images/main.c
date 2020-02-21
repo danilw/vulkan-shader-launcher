@@ -120,11 +120,12 @@ static vk_error init_texture(struct vk_physical_device *phy_dev, struct vk_devic
         .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
         .make_view = true,
         .host_visible = false,
+        .anisotropyEnable = true,
+        .repeat_mode = VK_SAMPLER_ADDRESS_MODE_REPEAT, //VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER //VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+        .mipmaps = true,
     };
     
-    //VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER
-    //VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-    retval = vk_create_images(phy_dev, dev, image, 1, true, VK_SAMPLER_ADDRESS_MODE_REPEAT);
+    retval = vk_create_images(phy_dev, dev, image, 1);
     if (!vk_error_is_success(&retval))
     {
         retval.error.type=VK_ERROR_ERRNO;
