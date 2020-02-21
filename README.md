@@ -10,6 +10,7 @@
 
 All binary builds in single zip. **Binary build download link** Windows **[Download Win64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples.zip)** and Linux **[Download Linux64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples_linux.zip)**
 
+### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 ___
 **Features** - framebuffers binding, resize support, minimize support, surfaces, blend, loading images, mipmaps, saving frames... and other look examples they display some of features.
 
@@ -53,8 +54,6 @@ x86_64-w64-mingw32-gcc -DVK_USE_PLATFORM_WIN32_KHR -O3 -s -lm -mwindows ../vk_ut
 ```
 
 *old code removed, everything udated, old code can be found* [link](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/vulkan-shader-launcher_old.zip)
-
-### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 
 **Images:** 
 
