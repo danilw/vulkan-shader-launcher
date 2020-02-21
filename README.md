@@ -11,7 +11,7 @@
 All binary builds in single zip. **Binary build download link** Windows **[Download Win64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples.zip)** and Linux **[Download Linux64](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/Vulkan_shader_launcher_examples_linux.zip)**
 
 ___
-**Features** - framebuffers binding, resize support, minimize support, surfaces, blend, loading images, saving frames... and other look examples they display some of features.
+**Features** - framebuffers binding, resize support, minimize support, surfaces, blend, loading images, mipmaps, saving frames... and other look examples they display some of features.
 
 ___
 **Ultra minimal** *100 lines of code Vulkan launcher* link to [apollonian.c](https://github.com/przemyslawzaworski/CPP-Programming/blob/master/Vulkan/apollonian.c) or link to  [przemyslawzaworski](https://github.com/przemyslawzaworski/CPP-Programming) repository, he made very amazing small code!
@@ -23,7 +23,7 @@ ___
 
 **Example FBO** - [base on this shader](https://www.shadertoy.com/view/3syXDD) game that on *screenshot*, game logic on GPU, using framebuffer to store/read data, also *yari-v* and build in shaders.
 
-**Example images** - imgages/textures loading. [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps (mipmaps will be added latter (TODO))
+**Example images** - imgages/textures loading. [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps, mipmaps supported.
 
 **Example validation** - connect Vulkan validation layers to this code. \<TODO\>
 
