@@ -111,7 +111,7 @@ static vk_error init_texture(struct vk_physical_device *phy_dev, struct vk_devic
         return retval;
     }
     
-    VkFormat img_format=VK_FORMAT_R8G8B8A8_SRGB;
+    VkFormat img_format=VK_FORMAT_R8G8B8A8_SRGB; //VK_FORMAT_R8G8B8A8_UNORM
     
     *image = (struct vk_image){
         .format = img_format,
