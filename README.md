@@ -28,7 +28,7 @@ ___
 
 **Example validation** - connect Vulkan validation layers to this code. \<TODO\>
 
-**Example shadertoy launcher** - proper launcher for shadertoy shaders, 4 framebuffers, texture support. \<TODO\>
+**[Shadertoy launcher](https://github.com/danilw/vulkan-shadertoy-launcher)** - proper launcher for shadertoy shaders, 4 framebuffers, texture support. Moved to its own repository [vulkan-shadertoy-launcher](https://github.com/danilw/vulkan-shadertoy-launcher).
 
 ___
 # Building
