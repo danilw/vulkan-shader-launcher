@@ -24,7 +24,7 @@ ___
 
 **Example FBO** - [base on this shader](https://www.shadertoy.com/view/3syXDD) game that on *screenshot*, game logic on GPU, using framebuffer to store/read data, also *yari-v* and build in shaders.
 
-**Example images** - imgages/textures loading. [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps, mipmaps supported.
+**Example images** - imgages/textures loading. [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps, mipmaps supported. Default image format is *SRGB*, to change edit line 114 [example_images/main.c](https://github.com/danilw/vulkan-shader-launcher/blob/master/example_images/main.c#L114).
 
 **Example validation** - connect Vulkan validation layers to this code. \<TODO\>
 
