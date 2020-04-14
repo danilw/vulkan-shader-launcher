@@ -26,7 +26,7 @@ ___
 
 **Example images** - imgages/textures loading. [Used shader](https://www.shadertoy.com/view/lsfGWn) to test mipmaps, mipmaps supported. Default image format is *SRGB*, to change edit line 114 [example_images/main.c](https://github.com/danilw/vulkan-shader-launcher/blob/master/example_images/main.c#L114).
 
-**use Validation layer** - use [VK_validation.sh](https://github.com/danilw/vulkan-shader-launcher/blob/master/use_validation_layer/VK_validation.sh) script for that. This code does not have validation errors.
+**use Validation layer** - use [VK_validation.sh](https://github.com/danilw/vulkan-shader-launcher/blob/master/use_validation_layer/VK_validation.sh) script for that. This *shader launcher code* does not have validation errors.
 
 **[Shadertoy launcher](https://github.com/danilw/vulkan-shadertoy-launcher)** - proper launcher for shadertoy shaders, 4 framebuffers, texture support. Moved to its own repository [vulkan-shadertoy-launcher](https://github.com/danilw/vulkan-shadertoy-launcher).
 
