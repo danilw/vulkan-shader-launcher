@@ -1,5 +1,4 @@
 // Danil, 2020 Vulkan shader launcher, self https://github.com/danilw/vulkan-shader-launcher
-// code based on Shabi's Vulkan Tutorials https://github.com/ShabbyX/vktut
 
 #include <stdio.h>
 #include <stdlib.h>
