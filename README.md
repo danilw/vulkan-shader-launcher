@@ -4,7 +4,7 @@
 
 **Dependencies** - only vulkan library(sdk), and win32/X11 for window and keyboard/mouse control.
 
-**Source of code** - cube-demo from VulkanSDK, and [vktut](https://github.com/ShabbyX/vktut)
+**Source of code** - I made this code following cube-demo from VulkanSDK and [vktut](https://github.com/ShabbyX/vktut), this my code released under *The MIT License*.
 
 **Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11)
 
