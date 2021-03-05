@@ -53,6 +53,8 @@ Build with **mingw64** (*vulkan-1.dll* from VulkanSDK, *vulkan.h* in system(cygw
 x86_64-w64-mingw32-gcc -DVK_USE_PLATFORM_WIN32_KHR -O3 -s -lm -mwindows ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample.exe <path to>/vulkan-1.dll
 ```
 
+*old code removed, everything udated, old code can be found* [link](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v1/vulkan-shader-launcher_old.zip)
+
 **Images:** 
 
 ![img](https://danilw.github.io/GLSL-howto/vulkan_sh_launcher/v2/scr1.jpg)
