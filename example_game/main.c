@@ -194,7 +194,7 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
         };
 
     // 8bit BGRA for main_image VK_FORMAT_B8G8R8A8_UNORM
-    retval = vk_create_graphics_buffers(phy_dev, dev, swapchain->surface_format.format, render_data->main_gbuffers, essentials->image_count,
+    retval = vk_create_graphics_buffers(phy_dev, dev, VK_FORMAT_B8G8R8A8_UNORM, render_data->main_gbuffers, essentials->image_count,
             &render_data->main_render_pass, VK_C_CLEAR, VK_WITHOUT_DEPTH);
     if (!vk_error_is_success(&retval))
     {
@@ -419,6 +419,21 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
     uint32_t image_index;
 
     res = vk_render_start(&essentials, dev, swapchain, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, &image_index);
+    if (res == VK_ERROR_OUT_OF_DATE_KHR) {
+        os_window->resize_event=true;
+        res = 0;
+        return true;
+    } else if (res == VK_ERROR_SURFACE_LOST_KHR) {
+        vkDestroySurfaceKHR(vk, swapchain->surface, NULL);
+        VkResult tres;
+        tres=vk_create_surface(vk, swapchain, os_window);
+        vk_error_set_vkresult(&retval, tres);
+        if (tres)
+            return false;
+        os_window->resize_event=true;
+        res = 0;
+        return true;
+    }
     if (res)
         return false;
 
