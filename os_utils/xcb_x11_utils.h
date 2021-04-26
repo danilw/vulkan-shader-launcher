@@ -88,7 +88,7 @@ static void app_handle_xcb_event(struct app_os_window *os_window, const xcb_gene
         case 3:
             os_window->app_data.iMouse_click[1] = false;
             os_window->app_data.iMouse_rclick[0] = -os_window->app_data.iMouse_rclick[0];
-            os_window->app_data.iMouse_rclick[1] = -os_window->app_data.iMouse_rclick[0];
+            os_window->app_data.iMouse_rclick[1] = -os_window->app_data.iMouse_rclick[1];
             break;
         }
         /*print_modifiers(ev->state);
