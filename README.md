@@ -8,6 +8,8 @@
 
 **Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11/wayland)
 
+**Wayland** - minimal setup with stable *xdg-shell*.
+
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 ___
 **Ultra minimal** *100 lines of code Vulkan launcher* link to [apollonian.c](https://github.com/przemyslawzaworski/CPP-Programming/blob/master/Vulkan/apollonian.c) or link to  [przemyslawzaworski](https://github.com/przemyslawzaworski/CPP-Programming) repository, przemyslawzaworski made very amazing small code!
