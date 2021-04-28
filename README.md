@@ -8,7 +8,7 @@
 
 **Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11/Wayland)
 
-**Wayland** - minimal setup with stable *xdg-shell*.
+**Wayland** - minimal setup with stable *xdg-shell*. Addef hotkey *f* as example of resize event.
 
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 ___
@@ -17,7 +17,7 @@ ___
 ___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause. Binary build(exe) 26kb size.
 
-**Example game** - single shader game example, drawing many elements in vulkan-drawcall loop, using Blend to draw mix color. Also using *yari-v* to compress shaders, and shaders build in to binary file. This example on video [youtube link](https://youtu.be/5Wzj-GNAo6c).
+**Example game** - single shader game example, drawing many elements in vulkan-drawcall loop, using Blend to draw mix color. Also using *yari-v* to compress shaders, and shaders build in to binary file. This example on video [youtube link](https://youtu.be/5Wzj-GNAo6c). Use *cmake*(CMakeLists.txt) to build single exe with buildin shader. 
 
 **Example FBO** - [base on this shader](https://www.shadertoy.com/view/3syXDD) game that on *screenshot*, game logic on GPU, using framebuffer to store/read data, also *yari-v* and build in shaders.
 
