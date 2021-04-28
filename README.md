@@ -6,7 +6,7 @@
 
 **Source of code** - I made this code following cube-demo from VulkanSDK and [vktut](https://github.com/ShabbyX/vktut), this my code released under *The MIT License*.
 
-**Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11/wayland)
+**Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11/Wayland)
 
 **Wayland** - minimal setup with stable *xdg-shell*.
 
