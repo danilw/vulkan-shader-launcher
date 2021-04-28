@@ -36,7 +36,7 @@ cd build
 cmake ..
 make
 ```
-To build with Wayland in *CMakeCache.txt* set `OPTION(USE_WAYLAND_LINUX "use Wayland for Linux" ON)` by default used X11.
+To build with Wayland in *CMakeLists.txt* set `OPTION(USE_WAYLAND_LINUX "use Wayland for Linux" ON)` by default used X11.
 
 
 *Building without cmake:*
