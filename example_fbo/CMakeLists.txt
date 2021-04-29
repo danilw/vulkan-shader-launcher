@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project("example_fbo")
 
-OPTION(USE_WAYLAND_LINUX "use Wayland for Linux" ON)
+OPTION(USE_WAYLAND_LINUX "use Wayland for Linux" OFF)
 
 find_package(Vulkan REQUIRED)
 if(NOT Vulkan_FOUND)
