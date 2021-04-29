@@ -10,7 +10,7 @@
 
 **Compiler/platform support** - VisualStudio, GCC/Clang, Mingw. OS Windows and Linux(X11/Wayland)
 
-**Wayland** - minimal setup with stable *xdg-shell*. Addef hotkey *f* as example of resize event.
+**Wayland** - minimal setup with stable *xdg-shell*. Added hotkey *f* as example of resize event.
 
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
 ___
