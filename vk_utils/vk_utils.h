@@ -18,6 +18,10 @@
 #if defined(VK_USE_PLATFORM_XCB_KHR)
 #include <X11/Xutil.h>
 #include <X11/Xlib-xcb.h>
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+#include <wayland-client.h>
+#include <wayland-client-protocol.h>
+#include "xdg-shell-client-protocol.h"
 #endif
 #include "vk_struct.h"
 
@@ -59,6 +63,8 @@ static inline vk_error vk_init(VkInstance *vk)
         VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 		VK_KHR_XCB_SURFACE_EXTENSION_NAME,
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+        VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
 #endif
 	};
 	return vk_init_ext(vk, extension_names, sizeof extension_names / sizeof *extension_names);

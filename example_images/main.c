@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined(VK_USE_PLATFORM_XCB_KHR)
+#if defined(VK_USE_PLATFORM_XCB_KHR)||defined(VK_USE_PLATFORM_WAYLAND_KHR)
 #include <unistd.h>
 #endif
 
@@ -57,9 +57,9 @@ struct render_data
         struct vertex
         {
             float pos[3];
-        } vertices[4];
+        } vertices[3];
 
-        uint16_t indices[4];
+        uint16_t indices[3];
     } objects;
 
     struct shaders_uniforms push_constants;
@@ -97,6 +97,8 @@ static bool on_window_resize(struct vk_physical_device *phy_dev, struct vk_devic
 #include "../os_utils/os_win_utils.h"
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 #include "../os_utils/xcb_x11_utils.h"
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+#include "../os_utils/wayland_utils.h"
 #endif
 
 static vk_error init_texture(struct vk_physical_device *phy_dev, struct vk_device *dev,
@@ -180,19 +182,15 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
                 {
                     [0] =
                         (struct vertex){
-                            .pos = {1.0, 1.0, 0.0},
+                            .pos = {3.001, 1.001, 0.0},
                         },
                     [1] =
                         (struct vertex){
-                            .pos = {1.0, -1.0, 0.0},
+                            .pos = {-1.001, -3.001, 0.0},
                         },
                     [2] =
                         (struct vertex){
-                            .pos = {-1.0, 1.0, 0.0},
-                        },
-                    [3] =
-                        (struct vertex){
-                            .pos = {-1.0, -1.0, 0.0},
+                            .pos = {-1.001, 1.001, 0.0},
                         },
                 },
             .indices =
@@ -200,7 +198,6 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
                     0,
                     1,
                     2,
-                    3,
                 },
         };
 
@@ -452,6 +449,17 @@ static void exit_cleanup(VkInstance vk, struct vk_device *dev, struct vk_swapcha
     xcb_destroy_window(os_window->connection, os_window->xcb_window);
     xcb_disconnect(os_window->connection);
     free(os_window->atom_wm_delete_window);
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    xdg_toplevel_destroy(os_window->xdg_toplevel);
+    xdg_surface_destroy(os_window->xdg_surface);
+    wl_keyboard_destroy(os_window->keyboard);
+    wl_pointer_destroy(os_window->pointer);
+    wl_seat_destroy(os_window->seat);
+    wl_surface_destroy(os_window->surface);
+    xdg_wm_base_destroy(os_window->shell);
+    wl_compositor_destroy(os_window->compositor);
+    wl_registry_destroy(os_window->registry);
+    wl_display_disconnect(os_window->display);
 #endif
     vk_exit(vk);
 }
@@ -690,6 +698,30 @@ void init_win_params(struct app_os_window *os_window)
     os_window->resize_event = false;
     os_window->reload_shaders_on_resize = false;
     os_window->print_debug = false;
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+    os_window->connection = NULL;
+    os_window->window = NULL;
+    os_window->minsize.x = 1;
+    os_window->minsize.y = 1;
+#elif defined(VK_USE_PLATFORM_XCB_KHR)
+    os_window->atom_wm_delete_window = NULL;
+    os_window->xcb_window = 0;
+    os_window->screen = NULL;
+    os_window->connection = NULL;
+    os_window->display = NULL;
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    os_window->display = NULL;
+    os_window->registry = NULL;
+    os_window->compositor = NULL;
+    os_window->surface = NULL;
+    os_window->shell = NULL;
+    os_window->seat = NULL;
+    os_window->pointer = NULL;
+    os_window->keyboard = NULL;
+    os_window->xdg_surface = NULL;
+    os_window->xdg_toplevel = NULL;
+    os_window->configured = false;
+#endif
     strncpy(os_window->name, "Vulkan Shader launcher | twitter.com/AruGL", APP_NAME_STR_LEN);
 }
 
@@ -739,6 +771,54 @@ static void render_loop_xcb(struct vk_physical_device *phy_dev, struct vk_device
     }
     exit_cleanup_render_loop(dev, &essentials, &render_data);
 }
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+static void render_loop_wayland(struct vk_physical_device *phy_dev, struct vk_device *dev, struct vk_swapchain *swapchain,
+                            struct app_os_window *os_window)
+{
+    static bool init_surface_size_once=true; // in Wayland surface should set window size, I do it on start, on start window size 0,0
+    while (!os_window->app_data.quit)
+    {
+        while (!os_window->configured)
+          wl_display_dispatch(os_window->display);
+        while (wl_display_prepare_read(os_window->display) != 0)
+          wl_display_dispatch_pending(os_window->display);
+        wl_display_flush(os_window->display);
+        wl_display_read_events(os_window->display);
+        wl_display_dispatch_pending(os_window->display);
+
+        if (os_window->app_data.pause)
+        {
+          sleep_ms(10);
+        }
+        
+        if (((!os_window->is_minimized) && (!os_window->resize_event)) || init_surface_size_once)
+        {
+            if (!os_window->app_data.quit)
+            {
+                os_window->app_data.quit = !render_loop_draw(phy_dev, dev, swapchain, os_window);
+            }
+            else
+                break;
+            init_surface_size_once = false;
+        }
+        else
+        {
+            if ((!os_window->is_minimized) && os_window->resize_event)
+            {
+                on_window_resize(phy_dev, dev, &essentials, swapchain, &render_data,
+                                 os_window);
+            }
+        }
+        
+        if (os_window->is_minimized)
+        { // I do not delete everything on minimize, only stop rendering
+            sleep_ms(10);
+        }
+
+    }
+    exit_cleanup_render_loop(dev, &essentials, &render_data);
+}
+
 #endif
 
 void print_usage(char *name)
@@ -914,7 +994,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
     return (int)msg.wParam;
 }
 
-#elif defined(VK_USE_PLATFORM_XCB_KHR)
+#elif defined(VK_USE_PLATFORM_XCB_KHR) || defined(VK_USE_PLATFORM_WAYLAND_KHR)
 
 int main(int argc, char **argv)
 {
@@ -991,6 +1071,7 @@ int main(int argc, char **argv)
         return retval;
     }
 
+#if defined(VK_USE_PLATFORM_XCB_KHR)
     printf("Init XCB\n");
     app_init_connection(&os_window);
     app_create_xcb_window(&os_window);
@@ -1006,6 +1087,24 @@ int main(int argc, char **argv)
 
     render_loop_init(&phy_dev, &dev, &swapchain, &os_window);
     render_loop_xcb(&phy_dev, &dev, &swapchain, &os_window);
+
+#else
+    printf("Init Wayland\n");
+    initWaylandConnection(&os_window);
+    setupWindow(&os_window);
+    swapchain.swapchain = VK_NULL_HANDLE;
+    res = vk_get_swapchain(vk, &phy_dev, &dev, &swapchain, &os_window, 1, &os_window.present_mode);
+    if (vk_error_is_error(&res))
+    {
+        vk_error_printf(&res, "Could not create surface and swapchain\n");
+        exit_cleanup(vk, &dev, &swapchain, &os_window);
+        return retval;
+    }
+    
+    render_loop_init(&phy_dev, &dev, &swapchain, &os_window);
+    render_loop_wayland(&phy_dev, &dev, &swapchain, &os_window);
+    
+#endif
 
     retval = 0;
 

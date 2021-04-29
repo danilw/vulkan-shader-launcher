@@ -194,6 +194,18 @@ struct app_os_window {
     xcb_screen_t *screen;
     xcb_window_t xcb_window;
     xcb_intern_atom_reply_t *atom_wm_delete_window;
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    struct wl_display *display;
+    struct wl_registry *registry;
+    struct wl_compositor *compositor;
+    struct wl_surface *surface;
+    struct xdg_wm_base *shell;
+    struct wl_seat *seat;
+    struct wl_pointer *pointer;
+    struct wl_keyboard *keyboard;
+    struct xdg_surface *xdg_surface;
+    struct xdg_toplevel *xdg_toplevel;
+    bool configured;
 #endif
     char name[APP_NAME_STR_LEN];
     
