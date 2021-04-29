@@ -16,6 +16,10 @@
 #include "../vk_utils/vk_render_helper.h"
 #include "../os_utils/utils.h"
 
+#if defined(VK_USE_PLATFORM_WAYLAND_KHR)
+static int resize_size[2] = {1280, 720}; // in Wayland surface should set own size
+#endif
+
 #include "debug.h"
 
 struct shaders_uniforms
@@ -173,10 +177,18 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
             return retval;
         }
     }
+  struct VkExtent2D init_size;
+#if defined(VK_USE_PLATFORM_WAYLAND_KHR)
+  init_size.width = resize_size[0];
+  init_size.height = resize_size[1];
+#else
+  init_size.width = swapchain->surface_caps.currentExtent.width;
+  init_size.height = swapchain->surface_caps.currentExtent.height;
+#endif
     render_data->main_gbuffers = malloc(essentials->image_count * sizeof *render_data->main_gbuffers);
     for (uint32_t i = 0; i < essentials->image_count; ++i)
         render_data->main_gbuffers[i] = (struct vk_graphics_buffers){
-            .surface_size = swapchain->surface_caps.currentExtent,
+            .surface_size = init_size,
             .swapchain_image = essentials->images[i],
         };
 
@@ -356,6 +368,11 @@ static bool on_window_resize(struct vk_physical_device *phy_dev, struct vk_devic
 
     vkDeviceWaitIdle(dev->device);
     os_window->prepared = false;
+
+#if defined(VK_USE_PLATFORM_WAYLAND_KHR)
+  resize_size[0] = os_window->app_data.iResolution[0];
+  resize_size[1] = os_window->app_data.iResolution[1];
+#endif
 
     vk_free_pipelines(dev, &render_data->main_pipeline, 1);
     vk_free_graphics_buffers(dev, render_data->main_gbuffers, essentials->image_count, render_data->main_render_pass);
@@ -559,6 +576,10 @@ void init_win_params(struct app_os_window *os_window)
 {
     os_window->app_data.iResolution[0] = 1280;
     os_window->app_data.iResolution[1] = 720;
+#if defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    resize_size[0] = os_window->app_data.iResolution[0];
+    resize_size[1] = os_window->app_data.iResolution[1];
+#endif
     os_window->app_data.iFrame = 0;
     os_window->app_data.iMouse[0] = 0;
     os_window->app_data.iMouse[1] = 0;
