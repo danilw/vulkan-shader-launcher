@@ -53,6 +53,7 @@ gcc -DVK_USE_PLATFORM_XCB_KHR -O2 -s ../vk_utils/vk_utils.c ../vk_utils/vk_error
 ```
 Wayland:
 ```
+wayland_protocols_dir=$(pkg-config --variable=pkgdatadir wayland-protocols)
 wayland-scanner client-header $wayland_protocols_dir/stable/xdg-shell/xdg-shell.xml xdg-shell-client-protocol.h
 wayland-scanner private-code $wayland_protocols_dir/stable/xdg-shell/xdg-shell.xml xdg-shell-client-protocol.c
 
