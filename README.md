@@ -57,7 +57,7 @@ wayland_protocols_dir=$(pkg-config --variable=pkgdatadir wayland-protocols)
 wayland-scanner client-header $wayland_protocols_dir/stable/xdg-shell/xdg-shell.xml xdg-shell-client-protocol.h
 wayland-scanner private-code $wayland_protocols_dir/stable/xdg-shell/xdg-shell.xml xdg-shell-client-protocol.c
 
-gcc -DVK_USE_PLATFORM_WAYLAND_KHR -O2 -s -I. -I/usr/include/wayland ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c xdg-shell-client-protocol.c main.c -o VKexample -lm -lxcb -lvulkan -lwayland-client
+gcc -DVK_USE_PLATFORM_WAYLAND_KHR -O2 -s -I. -I/usr/include/wayland ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c xdg-shell-client-protocol.c main.c -o VKexample -lm -lvulkan -lwayland-client
 ```
 
 Build with **mingw64** (*vulkan-1.dll* from VulkanSDK, *vulkan.h* in system(cygwin or native) path):
