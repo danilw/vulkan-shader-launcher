@@ -81,7 +81,7 @@ Build with **mingw64** (*vulkan-1.dll* from VulkanSDK, *vulkan.h* in system(cygw
 ```
 x86_64-w64-mingw32-gcc -DVK_USE_PLATFORM_WIN32_KHR -O3 -s ../vk_utils/vk_utils.c ../vk_utils/vk_error_print.c ../vk_utils/vk_render_helper.c main.c -o VKexample.exe -lm -mwindows <path to>/vulkan-1.dll
 ```
-(in the *example game and fbo* add `-DYARIV_SHADER` to build command to have yari-v shaders in the bin(exe), to compile yari-v shader use *shaders/build_shaders_yariv.sh*)
+(**in the *example game and fbo* add** `-DYARIV_SHADER` **to build command** to have yari-v shaders in the bin(exe), to compile yari-v shader use *shaders/build_shaders_yariv.sh*)
 
 **Images:** 
 
