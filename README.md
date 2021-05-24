@@ -1,6 +1,6 @@
 # vulkan shader launcher
 
-**what is it** creating simple minimal "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else). Without validation errors and crossplatform.
+**what is it** creating simple minimal and **Valid** "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else). Without validation errors and crossplatform.
 
 **Download** example build [**from Releases**](https://github.com/danilw/vulkan-shader-launcher/releases/tag/rel_1_1). Minimal binary build size, after upx compression, ~30kb. Using [yari-v](https://github.com/sheredom/yari-v) to compress shaders, in *example_fbo* size of bin(exe) with shaders ~50Kb.
 
@@ -13,9 +13,6 @@
 **Wayland** - minimal setup with stable *xdg-shell*. Added hotkey *f* as example of resize event.
 
 ### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
-___
-**Ultra minimal** *100 lines of code Vulkan launcher* link to [apollonian.c](https://github.com/przemyslawzaworski/CPP-Programming/blob/master/Vulkan/apollonian.c) or link to  [przemyslawzaworski](https://github.com/przemyslawzaworski/CPP-Programming) repository, przemyslawzaworski made very amazing small code!
-
 ___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause. Binary build(exe) 30kb size.
 
