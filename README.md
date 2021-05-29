@@ -1,6 +1,6 @@
 # vulkan shader launcher
 
-**what is it** creating simple minimal and **Valid** "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else). Without validation errors and crossplatform.
+**what is it** creating simple minimal and **Valid** "shader launcher" using Vulkan and C, for launch any shaders(from shadertoy or any else). Without validation errors and crossplatform. Using Vulkan 1.0
 
 **Download** example build [**from Releases**](https://github.com/danilw/vulkan-shader-launcher/releases/tag/rel_1_1). Minimal binary build size, after upx compression, ~30kb. Using [yari-v](https://github.com/sheredom/yari-v) to compress shaders, in *example_fbo* size of bin(exe) with shaders ~50Kb.
 
