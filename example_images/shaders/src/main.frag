@@ -11,15 +11,15 @@ layout (set = 0, binding = 1) uniform sampler2D iChannel1;
 
 layout (push_constant) uniform push_constants
 {
-	vec4 u_Mouse;
-	vec4 u_Date;
-	bvec2 u_Mouse_lr; //is mouse left[0], right[1] clicked
-	vec2 u_Resolution;
-	bool u_debugdraw;
-	bool u_pause;
-	float u_Time;
-	float u_TimeDelta;
-	int u_Frame;
+  vec4 u_Mouse;
+  vec4 u_Date;
+  bvec2 u_Mouse_lr; //is mouse left[0], right[1] clicked
+  vec2 u_Resolution;
+  bool u_debugdraw;
+  int pCustom;
+  float u_Time;
+  float u_TimeDelta;
+  int u_Frame;
 } constants;
 
 vec3 iResolution=vec3(constants.u_Resolution,1.);
@@ -29,7 +29,8 @@ int iFrame=constants.u_Frame;
 vec4 iMouse=constants.u_Mouse;
 vec4 iDate=constants.u_Date;
 bool is_debugdraw=constants.u_debugdraw;
-bool is_pause=constants.u_pause;
+bool is_pause=bool(constants.pCustom-(constants.pCustom/10)*10);
+bool main_image_srgb=bool((constants.pCustom/10)*10-(constants.pCustom/100)*100);
 
 layout (location = 0) out vec4 out_color;
 
@@ -43,4 +44,5 @@ void main()
     
     mainImage(uFragColor,fragCoord);
     out_color=uFragColor;
+    if(main_image_srgb)out_color.rgb = ((exp2(out_color.rgb)-1.0)-out_color.rgb*0.693147)*3.258891;
 }

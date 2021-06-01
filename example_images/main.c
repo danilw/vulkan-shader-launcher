@@ -20,6 +20,8 @@
 static int resize_size[2] = {1280, 720}; // in Wayland surface should set own size
 #endif
 
+static bool main_image_srgb = false; // srgb surface fix
+
 // using stb_image
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_THREAD_LOCALS
@@ -32,7 +34,7 @@ struct shaders_uniforms
     int iMouse_lr[2]; // is mouse left[0], right[1] clicked
     float iResolution[2];
     int debugdraw;
-    int pause;
+    int pCustom; //custom data
     float iTime;
     float iTimeDelta;
     int iFrame;
@@ -257,7 +259,8 @@ static vk_error allocate_render_data(struct vk_physical_device *phy_dev, struct 
 
 
     // 8bit BGRA for main_image VK_FORMAT_B8G8R8A8_UNORM
-    retval = vk_create_graphics_buffers(phy_dev, dev, VK_FORMAT_B8G8R8A8_UNORM, render_data->main_gbuffers,
+    if(swapchain->surface_format.format!=VK_FORMAT_B8G8R8A8_UNORM)main_image_srgb=true;
+    retval = vk_create_graphics_buffers(phy_dev, dev, swapchain->surface_format.format, render_data->main_gbuffers,
                                         essentials->image_count, &render_data->main_render_pass, VK_C_CLEAR,
                                         VK_WITHOUT_DEPTH);
     if (!vk_error_is_success(&retval))
@@ -656,7 +659,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
         .iDate[2] = my_time.day,
         .iDate[3] = day_sec,
         .debugdraw = (int)os_window->app_data.drawdebug,
-        .pause = (int)os_window->app_data.pause,
+        .pCustom=(os_window->app_data.pause?1:0)+(main_image_srgb?10:0),
     };
 
     vkCmdPushConstants(essentials.cmd_buffer, render_data.main_layout.pipeline_layout, VK_SHADER_STAGE_FRAGMENT_BIT, 0,
