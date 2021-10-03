@@ -433,31 +433,49 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
     }
     
     VkExtent2D swapchainExtent;
-    if (swapchain->surface_caps.currentExtent.width == 0xFFFFFFFF) {
-        swapchainExtent.width = os_window->app_data.iResolution[0];
-        swapchainExtent.height = os_window->app_data.iResolution[1];
+    VkImageFormatProperties format_properties;
+    res = vkGetPhysicalDeviceImageFormatProperties(phy_dev->physical_device, swapchain->surface_format.format, VK_IMAGE_TYPE_2D,
+            VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, 0, &format_properties);
+    if (res==VK_SUCCESS && (format_properties.maxExtent.width >= swapchain->surface_caps.currentExtent.width && format_properties.maxExtent.height >= swapchain->surface_caps.currentExtent.height))
+    {
+      if (swapchain->surface_caps.currentExtent.width == 0xFFFFFFFF) {
+          swapchainExtent.width = os_window->app_data.iResolution[0];
+          swapchainExtent.height = os_window->app_data.iResolution[1];
 
-        if (swapchainExtent.width < swapchain->surface_caps.minImageExtent.width) {
-            swapchainExtent.width = swapchain->surface_caps.minImageExtent.width;
-        }
-        else if (swapchainExtent.width > swapchain->surface_caps.maxImageExtent.width) {
-            swapchainExtent.width = swapchain->surface_caps.maxImageExtent.width;
-        }
+          if (swapchainExtent.width < swapchain->surface_caps.minImageExtent.width) {
+              swapchainExtent.width = swapchain->surface_caps.minImageExtent.width;
+          }
+          else if (swapchainExtent.width > swapchain->surface_caps.maxImageExtent.width) {
+              swapchainExtent.width = swapchain->surface_caps.maxImageExtent.width;
+          }
 
-        if (swapchainExtent.height < swapchain->surface_caps.minImageExtent.height) {
-            swapchainExtent.height = swapchain->surface_caps.minImageExtent.height;
-        }
-        else if (swapchainExtent.height > swapchain->surface_caps.maxImageExtent.height) {
-            swapchainExtent.height = swapchain->surface_caps.maxImageExtent.height;
-        }
+          if (swapchainExtent.height < swapchain->surface_caps.minImageExtent.height) {
+              swapchainExtent.height = swapchain->surface_caps.minImageExtent.height;
+          }
+          else if (swapchainExtent.height > swapchain->surface_caps.maxImageExtent.height) {
+              swapchainExtent.height = swapchain->surface_caps.maxImageExtent.height;
+          }
+      }
+      else {
+          swapchainExtent = swapchain->surface_caps.currentExtent;
+          os_window->app_data.iResolution[0] = swapchain->surface_caps.currentExtent.width;
+          os_window->app_data.iResolution[1] = swapchain->surface_caps.currentExtent.height;
+      }
     }
     else {
-        swapchainExtent = swapchain->surface_caps.currentExtent;
+        printf("Error: too large resolution, currentExtent width, height: %d, %d; iResolution.xy: %d, %d; maxExtent width, height: %d, %d \n", 
+        swapchain->surface_caps.currentExtent.width, swapchain->surface_caps.currentExtent.height,
+        os_window->app_data.iResolution[0], os_window->app_data.iResolution[1],
+        format_properties.maxExtent.width, format_properties.maxExtent.height);
         os_window->app_data.iResolution[0] = swapchain->surface_caps.currentExtent.width;
         os_window->app_data.iResolution[1] = swapchain->surface_caps.currentExtent.height;
+        if (format_properties.maxExtent.width < swapchain->surface_caps.currentExtent.width)os_window->app_data.iResolution[0] = format_properties.maxExtent.width;
+        if (format_properties.maxExtent.height < swapchain->surface_caps.currentExtent.height)os_window->app_data.iResolution[1] = format_properties.maxExtent.height;
+        swapchainExtent.width = os_window->app_data.iResolution[0];
+        swapchainExtent.height = os_window->app_data.iResolution[1];
     }
 
-    if (os_window->app_data.iResolution[0] == 0 || os_window->app_data.iResolution[1] == 0) {
+    if (os_window->app_data.iResolution[0] <= 0 || os_window->app_data.iResolution[1] <= 0) {
         os_window->is_minimized = true;
         return VK_ERROR_NONE;
     }
@@ -567,6 +585,7 @@ vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *
         VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
         VkSampleCountFlagBits samples = VK_SAMPLE_COUNT_1_BIT;
         VkImageLayout layout = VK_IMAGE_LAYOUT_UNDEFINED;
+        
         if (images[i].will_be_initialized || images[i].host_visible)
         {
             images[i].usage &= VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
@@ -1276,12 +1295,24 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
     vk_error retval = VK_ERROR_NONE;
     VkResult res;
     vk_error err;
+    
+    VkImageFormatProperties format_properties;
+    res = vkGetPhysicalDeviceImageFormatProperties(phy_dev->physical_device, format, VK_IMAGE_TYPE_2D,
+            VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 0, &format_properties);
+    vk_error_sub_set_vkresult(&retval, res);
+    if (res != VK_SUCCESS)return retval;
 
     for (uint32_t i = 0; i < offscreen_buffer_count; ++i)
     {
         offscreen_buffers[i].color= (struct vk_image){0};
         offscreen_buffers[i].depth = (struct vk_image){0};
         offscreen_buffers[i].framebuffer = NULL;
+        if (format_properties.maxExtent.width < offscreen_buffers[i].surface_size.width){
+          offscreen_buffers[i].surface_size.width=format_properties.maxExtent.width;
+        }
+        if (format_properties.maxExtent.height < offscreen_buffers[i].surface_size.height){
+          offscreen_buffers[i].surface_size.height=format_properties.maxExtent.height;
+        }
     }
 
     VkFormat depth_format = vk_get_supported_depth_stencil_format(phy_dev);
@@ -1360,12 +1391,24 @@ vk_error vk_create_graphics_buffers(struct vk_physical_device *phy_dev, struct v
     vk_error retval = VK_ERROR_NONE;
     VkResult res;
     vk_error err;
+    
+    VkImageFormatProperties format_properties;
+    res = vkGetPhysicalDeviceImageFormatProperties(phy_dev->physical_device, format, VK_IMAGE_TYPE_2D,
+            VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 0, &format_properties);
+    vk_error_sub_set_vkresult(&retval, res);
+    if (res != VK_SUCCESS)return retval;
 
     for (uint32_t i = 0; i < graphics_buffer_count; ++i)
     {
         graphics_buffers[i].color_view = NULL;
         graphics_buffers[i].depth = (struct vk_image){0};
         graphics_buffers[i].framebuffer = NULL;
+        if (format_properties.maxExtent.width < graphics_buffers[i].surface_size.width){
+          graphics_buffers[i].surface_size.width=format_properties.maxExtent.width;
+        }
+        if (format_properties.maxExtent.height < graphics_buffers[i].surface_size.height){
+          graphics_buffers[i].surface_size.height=format_properties.maxExtent.height;
+        }
     }
 
     VkFormat depth_format = vk_get_supported_depth_stencil_format(phy_dev);;
