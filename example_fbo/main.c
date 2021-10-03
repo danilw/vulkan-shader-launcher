@@ -819,13 +819,13 @@ void update_push_constants_local_size(float width, float height)
         0.5 * height;
     render_data.push_constants.iMouse[2] =
         sign(render_data.push_constants.iMouse[2]) *
-        (((abs(render_data.push_constants.iMouse[2]) / render_data.push_constants.iResolution[1]) -
+        (((abs((int)render_data.push_constants.iMouse[2]) / render_data.push_constants.iResolution[1]) -
           0.5 * (render_data.push_constants.iResolution[0] / render_data.push_constants.iResolution[1])) *
              height +
          0.5 * width);
     render_data.push_constants.iMouse[3] =
         sign(render_data.push_constants.iMouse[3]) *
-        (((abs(render_data.push_constants.iMouse[3]) / render_data.push_constants.iResolution[1]) - 0.5) * height +
+        (((abs((int)render_data.push_constants.iMouse[3]) / render_data.push_constants.iResolution[1]) - 0.5) * height +
          0.5 * height);
     render_data.push_constants.iResolution[0] = width;
     render_data.push_constants.iResolution[1] = height;

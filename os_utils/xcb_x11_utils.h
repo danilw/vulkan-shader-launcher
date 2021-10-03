@@ -9,7 +9,7 @@ static void print_modifiers(uint32_t mask)
     printf("Modifier mask: ");
     for (mod = mods; mask; mask >>= 1, mod++)
         if (mask & 1)
-            printf(*mod);
+            printf("%s ", *mod);
     putchar('\n');
 }
 

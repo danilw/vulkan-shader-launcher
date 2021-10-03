@@ -1,14 +1,14 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(yariv)
 
 set(SOURCES
-	"main.c" 
+  "main.c" 
 )
 
 add_executable(
-		yariv_pack
-		${SOURCES}
+    yariv_pack
+    ${SOURCES}
 )
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
