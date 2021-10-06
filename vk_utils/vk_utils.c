@@ -436,7 +436,10 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
     VkImageFormatProperties format_properties;
     res = vkGetPhysicalDeviceImageFormatProperties(phy_dev->physical_device, swapchain->surface_format.format, VK_IMAGE_TYPE_2D,
             VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, 0, &format_properties);
-    if (res==VK_SUCCESS && (format_properties.maxExtent.width >= swapchain->surface_caps.currentExtent.width && format_properties.maxExtent.height >= swapchain->surface_caps.currentExtent.height))
+    if (res==VK_SUCCESS
+    && (format_properties.maxExtent.width >= swapchain->surface_caps.currentExtent.width && format_properties.maxExtent.height >= swapchain->surface_caps.currentExtent.height)
+    || (swapchain->surface_caps.currentExtent.width == 0xFFFFFFFF)
+    )
     {
       if (swapchain->surface_caps.currentExtent.width == 0xFFFFFFFF) {
           swapchainExtent.width = os_window->app_data.iResolution[0];
@@ -463,10 +466,10 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
       }
     }
     else {
-        printf("Error: too large resolution, currentExtent width, height: %d, %d; iResolution.xy: %d, %d; maxExtent width, height: %d, %d \n", 
-        swapchain->surface_caps.currentExtent.width, swapchain->surface_caps.currentExtent.height,
-        os_window->app_data.iResolution[0], os_window->app_data.iResolution[1],
-        format_properties.maxExtent.width, format_properties.maxExtent.height);
+        printf("Error: too large resolution, currentExtent width, height: %lu, %lu; iResolution.xy: %lu, %lu; maxExtent width, height: %lu, %lu \n", 
+        (unsigned long)swapchain->surface_caps.currentExtent.width, (unsigned long)swapchain->surface_caps.currentExtent.height,
+        (unsigned long)os_window->app_data.iResolution[0], (unsigned long)os_window->app_data.iResolution[1],
+        (unsigned long)format_properties.maxExtent.width, (unsigned long)format_properties.maxExtent.height);
         os_window->app_data.iResolution[0] = swapchain->surface_caps.currentExtent.width;
         os_window->app_data.iResolution[1] = swapchain->surface_caps.currentExtent.height;
         if (format_properties.maxExtent.width < swapchain->surface_caps.currentExtent.width)os_window->app_data.iResolution[0] = format_properties.maxExtent.width;
