@@ -1500,7 +1500,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
         RedrawWindow(os_window.window, NULL, NULL, RDW_INTERNALPAINT);
     }
 
-    exit_cleanup_render_loop(&dev, &essentials, &render_data);
+    exit_cleanup_render_loop(&dev, &essentials, &render_data, wait_buf_sem, wait_main_sem, offscreen_fence);
     exit_cleanup(vk, &dev, &swapchain, &os_window);
 
     return (int)msg.wParam;
