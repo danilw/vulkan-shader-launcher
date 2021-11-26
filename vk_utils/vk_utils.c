@@ -452,10 +452,41 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
         image_count = swapchain->surface_caps.maxImageCount;
 
     uint32_t surface_format_count = 1;
-    res = vkGetPhysicalDeviceSurfaceFormatsKHR(phy_dev->physical_device, swapchain->surface, &surface_format_count, &swapchain->surface_format);
+    res = vkGetPhysicalDeviceSurfaceFormatsKHR(phy_dev->physical_device, swapchain->surface, &surface_format_count, NULL);
     vk_error_set_vkresult(&retval, res);
     if (res < 0)
         return retval;
+    
+    if(surface_format_count<1){
+        retval.error.type=VK_ERROR_ERRNO;
+        vk_error_printf(&retval, "surface_format_count < 1\n");
+        return retval;
+    }
+
+    VkSurfaceFormatKHR surface_format[surface_format_count];
+
+    res = vkGetPhysicalDeviceSurfaceFormatsKHR(phy_dev->physical_device, swapchain->surface, &surface_format_count, &surface_format[0]);
+
+    vk_error_set_vkresult(&retval, res);
+    if (res < 0)
+        return retval;
+
+    swapchain->surface_format=surface_format[0];
+
+    if (surface_format_count > 1){
+        uint32_t suported_format_srgb = VK_FORMAT_B8G8R8A8_SRGB;
+        int found_srgb = -1;
+        uint32_t suported_format_linear = VK_FORMAT_B8G8R8A8_UNORM;
+        int found_linear = -1;
+
+        for (int i = 0; i < surface_format_count; i++){
+            if(surface_format[i].format==suported_format_srgb)found_srgb=i;
+            if(surface_format[i].format==suported_format_linear)found_linear=i;
+        }
+
+        if(found_linear>=0)swapchain->surface_format=surface_format[found_linear];
+        else if(found_srgb>=0)swapchain->surface_format=surface_format[found_srgb];
+    }
 
     if (surface_format_count == 1 && swapchain->surface_format.format == VK_FORMAT_UNDEFINED)
         swapchain->surface_format.format = VK_FORMAT_R8G8B8_UNORM;
@@ -578,6 +609,10 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
         .oldSwapchain = oldSwapchain,
         .clipped = true,
     };
+    /*
+    if (swapchain->surface_caps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) {
+        swapchain_info.imageUsage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    }*/
     
     uint32_t *presentable_queues = NULL;
     uint32_t presentable_queue_count = 0;
@@ -765,7 +800,7 @@ vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *
                 .addressModeU = images[i].repeat_mode,
                 .addressModeV = images[i].repeat_mode,
                 .addressModeW = images[i].repeat_mode,
-                .anisotropyEnable = images[i].anisotropyEnable, // false
+                .anisotropyEnable = images[i].anisotropyEnable && phy_dev->features.samplerAnisotropy, // false
                 .maxAnisotropy = phy_dev->properties.limits.maxSamplerAnisotropy,
                 .minLod = 0,
                 .maxLod = 1,
@@ -958,10 +993,10 @@ void vk_free_images(struct vk_device *dev, struct vk_image *images, uint32_t ima
 
     for (uint32_t i = 0; i < image_count; ++i)
     {
-        vkDestroyImageView(dev->device, images[i].view, NULL);
+        if(images[i].view)vkDestroyImageView(dev->device, images[i].view, NULL);
         vkDestroyImage(dev->device, images[i].image, NULL);
         vkFreeMemory(dev->device, images[i].image_mem, NULL);
-        vkDestroySampler(dev->device, images[i].sampler, NULL);
+        if(images[i].sampler)vkDestroySampler(dev->device, images[i].sampler, NULL);
     }
 }
 
@@ -1401,7 +1436,7 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
                 | VK_IMAGE_USAGE_SAMPLED_BIT,
             .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
             .make_view = true,
-            .anisotropyEnable = true,
+            .anisotropyEnable = true && phy_dev->features.samplerAnisotropy,
             .repeat_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
             .mipmaps = false,
         };
@@ -1417,7 +1452,7 @@ vk_error vk_create_offscreen_buffers(struct vk_physical_device *phy_dev, struct 
                 .extent = offscreen_buffers[i].surface_size,
                 .usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                 .make_view = true,
-                .anisotropyEnable = true,
+                .anisotropyEnable = true && phy_dev->features.samplerAnisotropy,
                 .repeat_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                 .mipmaps = false,
             };
@@ -1518,7 +1553,7 @@ vk_error vk_create_graphics_buffers(struct vk_physical_device *phy_dev, struct v
                 .make_view = true,
                 .multisample = false,
                 .will_be_initialized = false,
-                .anisotropyEnable = true,
+                .anisotropyEnable = true && phy_dev->features.samplerAnisotropy,
                 .repeat_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                 .mipmaps = false,
             };
