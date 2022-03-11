@@ -437,6 +437,7 @@ void print_fps(struct app_os_window *os_window)
 static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_device *dev, struct vk_swapchain *swapchain,
                              struct app_os_window *os_window)
 {
+    if (!os_window->prepared) return true;
     int res;
     vk_error retval = VK_ERROR_NONE;
 
