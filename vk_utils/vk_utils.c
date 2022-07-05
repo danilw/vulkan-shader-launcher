@@ -177,6 +177,7 @@ vk_error vk_get_commands(struct vk_physical_device *phy_dev, struct vk_device *d
         VkCommandBufferAllocateInfo buffer_info = {
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
             .commandPool = cmd->pool,
+            .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
             .commandBufferCount = create_num_cmd?create_count:queue_info[i].queueCount,
         };
 
@@ -526,7 +527,7 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
             }
             if(a)*present_mode = VK_PRESENT_MODE_FIFO_KHR;
             else if(b)*present_mode = VK_PRESENT_MODE_MAILBOX_KHR;
-            else if(b)*present_mode = VK_PRESENT_MODE_IMMEDIATE_KHR;
+            else if(c)*present_mode = VK_PRESENT_MODE_IMMEDIATE_KHR;
             
         }
     }
@@ -588,7 +589,7 @@ vk_error vk_get_swapchain(VkInstance vk, struct vk_physical_device *phy_dev, str
     VkSwapchainCreateInfoKHR swapchain_info = {
         .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
         .pNext = NULL,
-        .flags = VK_KHR_swapchain,
+        .flags = 0, // bug https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/4274
         .surface = swapchain->surface,
         .minImageCount = image_count,
         .imageFormat = swapchain->surface_format.format,
@@ -773,6 +774,7 @@ vk_error vk_create_images(struct vk_physical_device *phy_dev, struct vk_device *
                 .image = images[i].image,
                 .viewType = VK_IMAGE_VIEW_TYPE_2D,
                 .format = images[i].format,
+                .components = {VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A,},
                 .subresourceRange = {
                     .aspectMask = (images[i].usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) == 0?
                             VK_IMAGE_ASPECT_COLOR_BIT:
@@ -1533,6 +1535,7 @@ vk_error vk_create_graphics_buffers(struct vk_physical_device *phy_dev, struct v
             .image = graphics_buffers[i].swapchain_image,
             .viewType = VK_IMAGE_VIEW_TYPE_2D,
             .format = format,
+            .components = {VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A,},
             .subresourceRange = {
                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                 .baseMipLevel = 0,
