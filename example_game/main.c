@@ -596,7 +596,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
         vkCmdSetScissor(essentials.cmd_buffer, 0, 1, &scissor);
         vkCmdPushConstants(essentials.cmd_buffer, render_data.main_layout.pipeline_layout, VK_SHADER_STAGE_FRAGMENT_BIT,
                            0, sizeof render_data.push_constants, &render_data.push_constants);
-        vkCmdDraw(essentials.cmd_buffer, 4, 1, 0, 0);
+        vkCmdDraw(essentials.cmd_buffer, 3, 1, 0, 0);
     }
 
     // debug
@@ -619,7 +619,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
         vkCmdSetScissor(essentials.cmd_buffer, 0, 1, &scissor);
         vkCmdPushConstants(essentials.cmd_buffer, render_data.main_layout.pipeline_layout, VK_SHADER_STAGE_FRAGMENT_BIT,
                            0, sizeof render_data.push_constants, &render_data.push_constants);
-        vkCmdDraw(essentials.cmd_buffer, 4, 1, 0, 0);
+        vkCmdDraw(essentials.cmd_buffer, 3, 1, 0, 0);
     }
 
     // character
@@ -641,7 +641,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
         vkCmdSetScissor(essentials.cmd_buffer, 0, 1, &scissor);
         vkCmdPushConstants(essentials.cmd_buffer, render_data.main_layout.pipeline_layout, VK_SHADER_STAGE_FRAGMENT_BIT,
                            0, sizeof render_data.push_constants, &render_data.push_constants);
-        vkCmdDraw(essentials.cmd_buffer, 4, 1, 0, 0);
+        vkCmdDraw(essentials.cmd_buffer, 3, 1, 0, 0);
     }
 
     // particles
@@ -669,7 +669,7 @@ static bool render_loop_draw(struct vk_physical_device *phy_dev, struct vk_devic
             vkCmdPushConstants(essentials.cmd_buffer, render_data.main_layout.pipeline_layout,
                                VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof render_data.push_constants,
                                &render_data.push_constants);
-            vkCmdDraw(essentials.cmd_buffer, 4, 1, 0, 0);
+            vkCmdDraw(essentials.cmd_buffer, 3, 1, 0, 0);
         }
     }
 
