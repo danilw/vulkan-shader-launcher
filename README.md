@@ -18,7 +18,12 @@ Used Vulkan 1.0 and only single extension [VK_KHR_swapchain](https://vulkan.gpui
 
 **Wayland** - minimal setup with stable *xdg-shell*. Added hotkey *f* as example of resize event.
 
-### Contact: [**Join discord server**](https://discord.gg/JKyqWgt)
+___
+
+### Contact with me:
+
+**Matrix-chat room `#Shadertoy:envs.net` invite link** [matrix.to](https://matrix.to/#/#Shadertoy:envs.net) *(use web UI Element if you dont have acc)*
+
 ___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause. Binary build(exe) 30kb size.
 
