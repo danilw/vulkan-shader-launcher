@@ -22,7 +22,7 @@ ___
 
 ### Contact with me:
 
-**Matrix-chat room `#Shadertoy:envs.net` invite link** [matrix.to](https://matrix.to/#/#Shadertoy:envs.net) *(use web UI Element if you dont have acc)*
+**Matrix-chat room `#shadertoy:matrix.org` invite link** [matrix.to](https://matrix.to/#/#shadertoy:matrix.org) *(use web UI Element if you dont have acc)*
 
 ___
 **Example minimal** - single shader loader, shader from file. Control: Keyboard 1-debug, 2-vsynk 60fps, Space-pause. Binary build(exe) 30kb size.
